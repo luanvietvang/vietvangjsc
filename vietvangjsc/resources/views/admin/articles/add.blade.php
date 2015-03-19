@@ -21,185 +21,165 @@
             </div>
         </div>
         <!-- /.row -->
-
+        <form role="form">
         <div class="row">
             <div class="col-lg-6">
 
-                <form role="form">
+                <div class="form-group">
+                    <label>Categories</label>
+                    <select class="form-control" name="category_id">
+                        <!-- for -->
+                        <option>1</option>
+                    </select>
+                </div>
 
-                    <div class="form-group">
-                        <label>Categories</label>
-                        <select class="form-control">
-                            <!-- for -->
-                            <option>1</option>
-                        </select>
-                    </div>
+                <div class="form-group">
+                    <label>Menu</label>
+                    <select class="form-control" name="menu_id">
+                        <!-- for -->
+                        <option>1</option>
+                    </select>
+                </div>
 
-                    <div class="form-group">
-                        <label>Menu</label>
-                        <select class="form-control">
-                            <!-- for -->
-                            <option>1</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Hit</label>
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="hit" id="hit" value="option1" checked>Yes
-                            </label>
-                        </div>
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="hit" id="hit" value="option2">No
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Text Input</label>
-                        <input class="form-control">
-                        <p class="help-block">Example block-level help text here.</p>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Text Input with Placeholder</label>
-                        <input class="form-control" placeholder="Enter text">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Static Control</label>
-                        <p class="form-control-static">email@example.com</p>
-                    </div>
-
-                    <div class="form-group">
-                        <label>File input</label>
-                        <input type="file" name="image">
-                    </div>
-
-                    
-
-                    <div class="form-group">
-                        <label>Inline Radio Buttons</label>
-                        <label class="radio-inline">
-                            <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="option1" checked>1
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline2" value="option2">2
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline3" value="option3">3
+                <div class="form-group">
+                    <label>Hit</label>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="hit" id="hit" value="1" checked>Yes
                         </label>
                     </div>
-
-                    
-
-                    <div class="form-group">
-                        <label>Multiple Selects</label>
-                        <select multiple class="form-control">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="hit" id="hit" value="0">No
+                        </label>
                     </div>
+                </div>
+                
+                 <div class="form-group">
+                    <label>Image</label>
+                    <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" value="" checked="true">Using only this image
+                                </label>
+                            </div>
+                    <input type="file" name="image">
+                </div>
 
-                    <button type="submit" class="btn btn-default">Submit Button</button>
-                    <button type="reset" class="btn btn-default">Reset Button</button>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input class="form-control" placeholder="Enter text" name="title">
+                </div>
 
-                </form>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea class="form-control" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Full Text</label>
+                    <textarea class="form-control" rows="3"></textarea>
+                </div>
+
+                <h1>English Content</h1>
+
+                <fieldset disabled>
+                    <div class="form-group">
+                            <label>Image</label>
+                            <input type="file" name="image">
+                    </div>
+                </fieldset>
+
+                <div class="form-group">
+                    <label>Title</label>
+                    <input class="form-control" placeholder="Enter text" name="title">
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea class="form-control" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Full Text</label>
+                    <textarea class="form-control" rows="3"></textarea>
+                </div>
+
+                <h1>Japan Content</h1>
+
+               <fieldset disabled>
+                    <div class="form-group">
+                            <label>Image</label>
+                            <input type="file" name="image">
+                    </div>
+                </fieldset>
+
+                <div class="form-group">
+                    <label>Title</label>
+                    <input class="form-control" placeholder="Enter text" name="title">
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea class="form-control" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Full Text</label>
+                    <textarea class="form-control" rows="3"></textarea>
+                </div>
+                
+
+                <button type="submit" class="btn btn-default">Save</button>
+                <button type="submit" class="btn btn-default">Save & Continues</button>
+                <button type="reset" class="btn btn-default">Reset</button>
 
             </div>
             <div class="col-lg-6">
-                <h1>Disabled Form States</h1>
+                
+                <h1>SEO's</h1>
 
-                <form role="form">
+                <div class="form-group">
+                    <label>Keywords</label>
+                    <input class="form-control" placeholder="Enter text" name="keywords">
+                </div>
 
-                    <fieldset disabled>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea class="form-control" rows="3" name="description"></textarea>
+                </div>
 
-                        <div class="form-group">
-                            <label for="disabledSelect">Disabled input</label>
-                            <input class="form-control" id="disabledInput" type="text" placeholder="Disabled input" disabled>
-                        </div>
+                <div class="form-group">
+                    <label>Author</label>
+                    <input class="form-control" placeholder="Enter text" name="author">
+                </div>
 
-                        <div class="form-group">
-                            <label for="disabledSelect">Disabled select menu</label>
-                            <select id="disabledSelect" class="form-control">
-                                <option>Disabled select</option>
-                            </select>
-                        </div>
+                <div class="form-group">
+                    <label>Google publisher</label>
+                    <input class="form-control" placeholder="Enter text" name="google_publisher">
+                </div>
 
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox">Disabled Checkbox
-                            </label>
-                        </div>
+                <div class="form-group">
+                    <label>Google author</label>
+                    <input class="form-control" placeholder="Enter text" name="google_author">
+                </div>
 
-                        <button type="submit" class="btn btn-primary">Disabled Button</button>
+                <div class="form-group">
+                    <label>Facebook id</label>
+                    <input class="form-control" placeholder="Enter text" name="facebook_id">
+                </div>
 
-                    </fieldset>
+                <div class="form-group">
+                    <label>Og title</label>
+                    <input class="form-control" placeholder="Enter text" name="og_title">
+                </div>
 
-                </form>
-
-                <h1>Form Validation</h1>
-
-                <form role="form">
-
-                    <div class="form-group has-success">
-                        <label class="control-label" for="inputSuccess">Input with success</label>
-                        <input type="text" class="form-control" id="inputSuccess">
-                    </div>
-
-                    <div class="form-group has-warning">
-                        <label class="control-label" for="inputWarning">Input with warning</label>
-                        <input type="text" class="form-control" id="inputWarning">
-                    </div>
-
-                    <div class="form-group has-error">
-                        <label class="control-label" for="inputError">Input with error</label>
-                        <input type="text" class="form-control" id="inputError">
-                    </div>
-
-                </form>
-
-                <h1>Input Groups</h1>
-
-                <form role="form">
-
-                    <div class="form-group input-group">
-                        <span class="input-group-addon">@</span>
-                        <input type="text" class="form-control" placeholder="Username">
-                    </div>
-
-                    <div class="form-group input-group">
-                        <input type="text" class="form-control">
-                        <span class="input-group-addon">.00</span>
-                    </div>
-
-                    <div class="form-group input-group">
-                        <span class="input-group-addon"><i class="fa fa-eur"></i></span>
-                        <input type="text" class="form-control" placeholder="Font Awesome Icon">
-                    </div>
-
-                    <div class="form-group input-group">
-                        <span class="input-group-addon">$</span>
-                        <input type="text" class="form-control">
-                        <span class="input-group-addon">.00</span>
-                    </div>
-
-                    <div class="form-group input-group">
-                        <input type="text" class="form-control">
-                        <span class="input-group-btn"><button class="btn btn-default" type="button"><i class="fa fa-search"></i></button></span>
-                    </div>
-
-                </form>
-
-                <p>For complete documentation, please visit <a href="http://getbootstrap.com/css/#forms">Bootstrap's Form Documentation</a>.</p>
-
+                <div class="form-group">
+                    <label>Og description</label>
+                    <input class="form-control" placeholder="Enter text" name="og_description">
+                </div>
             </div>
         </div>
+        </form>
         <!-- /.row -->
 
     </div>

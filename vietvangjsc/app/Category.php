@@ -34,4 +34,10 @@ class Category extends Model{
 		}
 		return $result;
 	}
+
+	public static function getLstCategoriesVi(){
+		$result = Category::select('id as id', 'name as name')
+					->get();
+		return $result;
+	}
 }

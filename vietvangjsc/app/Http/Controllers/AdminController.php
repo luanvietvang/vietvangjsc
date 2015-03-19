@@ -93,7 +93,11 @@ class AdminController extends Controller {
 		//Set title
 		$title = 'Article [Add]';
 
+		//Get List categories
+		$cate = Category::getLstCategoriesVi();
+
 		//Validate Form - sẽ viết Service sau. Tạm thời bỏ qua bước này.
+
 
 		//Alias name vi 
 		$alias = mb_strtolower(Registrar::removesign(Input::get('title')));
@@ -148,7 +152,8 @@ class AdminController extends Controller {
 		// return Redirect::back();
 		return view('admin.articles.add')->with([
 				'msg' => $this->msg,
-				'title' => $title
+				'title' => $title,
+				'cate' => $cate
 			]);
 	}
 
