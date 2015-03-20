@@ -1,6 +1,6 @@
 <?php
  
-namespace RocketCandy\Exceptions;
+namespace App\RocketCandy\Exceptions;
  
 use Exception;
 use Illuminate\Support\MessageBag;

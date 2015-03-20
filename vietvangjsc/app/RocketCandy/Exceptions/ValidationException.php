@@ -1,6 +1,6 @@
 <?php
  
-namespace RocketCandy\Exceptions;
+namespace App\RocketCandy\Exceptions;
  
 class ValidationException extends BaseException {
 }   //end of class

@@ -1,9 +1,9 @@
 <?php
  
-namespace RocketCandy\Services\Validation;
+namespace App\RocketCandy\Services\Validation;
  
 use Illuminate\Validation\Factory as IlluminateValidator;
-use RocketCandy\Exceptions\ValidationException;
+use App\RocketCandy\Exceptions\ValidationException;
  
 /**
  * Base Validation class. All entity specific validation classes inherit

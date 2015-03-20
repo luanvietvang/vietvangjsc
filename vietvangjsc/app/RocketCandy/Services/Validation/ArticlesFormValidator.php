@@ -1,8 +1,8 @@
 <?php
  
-namespace RocketCandy\Services\Validation;
+namespace App\RocketCandy\Services\Validation;
  
-class ArticlesForm extends Validator {
+class ArticlesFormValidator extends Validator {
  
     /**
      * @var array Validation rules for the test form, they can contain in-built Laravel rules or our custom rules

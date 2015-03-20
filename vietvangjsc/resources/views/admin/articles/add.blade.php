@@ -28,16 +28,18 @@
                 <div class="form-group">
                     <label>Categories</label>
                     <select class="form-control" name="category_id">
-                        <!-- for -->
-                        <option>1</option>
+                        @foreach($cate as $ct)
+                            <option value="{!! $ct->id !!}">{!! $ct->name !!}</option>
+                        @endforeach
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label>Menu</label>
                     <select class="form-control" name="menu_id">
-                        <!-- for -->
-                        <option>1</option>
+                        @foreach($menu as $mn)
+                            {!! $mn !!}
+                        @endforeach
                     </select>
                 </div>
 
@@ -130,7 +132,7 @@
                 
 
                 <button type="submit" class="btn btn-default">Save</button>
-                <button type="submit" class="btn btn-default">Save & Continues</button>
+                <button type="continous" class="btn btn-default">Save & Continues</button>
                 <button type="reset" class="btn btn-default">Reset</button>
 
             </div>

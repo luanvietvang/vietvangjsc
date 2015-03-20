@@ -39,25 +39,18 @@ class Menu extends Model{
 		return $result;
 	}
 
-	$LstMenu = $this->getMenuVi();
-	public static function getlstMenuVi($LstMenu, $parent_id, $char){
-		$result = array();
-		foreach ($LstMenu as $value) {
-			# code...
-		}
-		return $result;
-	}
-
 	public static function getMenuVi(){
 		$result = Menu::orderBy('position')
-			->select('id as id', 'name as name')
+			->select('id as id', 'name as name', 'parent_id')
 			->get();
 		return $result;
 	}
 
-	public function CheckHasNode($id){
+	public static function checkHasNode($id){
 		$result = Menu::where('parent_id', '=', $id)
+			->take(0)->skip(1)
 			->get();
-		return $result;
+		if(is_null($result)) return false;
+		return true;
 	}
 }

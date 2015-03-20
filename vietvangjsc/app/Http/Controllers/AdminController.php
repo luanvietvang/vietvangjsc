@@ -15,6 +15,8 @@ use Mail;
 use Redirect;
 use Illuminate\Support\Facades\DB;
 use Url;
+use App\RocketCandy\Exceptions\ValidationException;
+use App\RocketCandy\Services\Validation\ArticlesFormValidator;
 
 class AdminController extends Controller {
 
@@ -34,11 +36,12 @@ class AdminController extends Controller {
 	 *
 	 * @return void
 	 */
-	public function __construct()
+	public function __construct(ArticlesFormValidator $validator)
 	{
 		//$this->middleware('auth');
 		$this->msg = Ini::message(true);
-
+		$this->resmenu = array();
+		$this->_validator = $validator;
 		//url to upload img
 		// $this->url = URL::to('public/upload/articles');
 		// //Real path img to upload
@@ -95,8 +98,12 @@ class AdminController extends Controller {
 
 		//Get List categories
 		$cate = Category::getLstCategoriesVi();
-
+		$menu = $this->printLstMenuVi(Menu::getMenuVi(),0, '-');
 		//Validate Form - sẽ viết Service sau. Tạm thời bỏ qua bước này.
+		//$_validator = \RocketCandy\Services\Validation\ArticlesForm;
+		$_input = Input::all();
+		try {
+		$validate_data = $this->_validator->validate($_input);
 
 
 		//Alias name vi 
@@ -135,7 +142,7 @@ class AdminController extends Controller {
 
 		$articles = new Article();
 		$res = $articles->Insert($dataVi, $dataLang, $dataSEO);
-		if($res != ''){
+		if(!$res){
 			$msg = array(
 				'type_msg' =>'danger',
 				'msg' =>'Lỗi! Đã có lỗi trong quá trình thêm - ref:'.$res
@@ -153,8 +160,18 @@ class AdminController extends Controller {
 		return view('admin.articles.add')->with([
 				'msg' => $this->msg,
 				'title' => $title,
-				'cate' => $cate
+				'cate' => $cate,
+				'menu' => $menu
 			]);
+		}
+		 catch ( ValidationException $e ) {
+            return view( 'admin.articles.add' )->with([
+				'msg' => $this->msg,
+				'title' => $title,
+				'cate' => $cate,
+				'menu' => $menu
+			])->withErrors( $e->get_errors() );
+        }
 	}
 
 	/**
@@ -180,5 +197,15 @@ class AdminController extends Controller {
 		session($msg);
 		return Redirect::back();
 		//return Redirect::to('admin/articles/');
+	}
+	
+	public function printLstMenuVi($lstMenu, $parent_id, $char){
+		foreach ($lstMenu as $v) {
+			if($v->parent_id == $parent_id){
+				array_push($this->resmenu,'<option value="'.$v->id.'">'.$char.$v->name.'</option>');
+				$this->printLstMenuVi($lstMenu, $v->id, $char.$char);
+			}
+		}
+		return $this->resmenu;
 	}
 }
