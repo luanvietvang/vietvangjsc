@@ -38,16 +38,20 @@
             </div>
         </div>
         <!-- /.row -->
-        {!! Form::open(array('action' => 'AdminController@articlesAdd_sm','files' => true)) !!}
+        {!! Form::open(array('action' => 'AdminController@articlesEdit_sm','files' => true)) !!}
         <div class="row">
             <div class="col-lg-6">
-
+                {!! Form::hidden('id', $obj->id) !!}
                 <div class="form-group">
                     <label>Categories</label>
                     <select class="form-control" name="category_id">
                         <option value="0">Select</option>
                         @foreach($cate as $ct)
-                            <option value="{!! $ct->id !!}">{!! $ct->name !!}</option>
+                            @if($ct->id == $obj->category_id)
+                                <option selected="selected" value="{!! $ct->id !!}">{!! $ct->name !!}</option>
+                            @else
+                                <option value="{!! $ct->id !!}">{!! $ct->name !!}</option>
+                            @endif
                         @endforeach
                     </select>
                 </div>
@@ -84,73 +88,79 @@
                             Using only this image
                         </label>
                     </div>
+
                     <input type="file" name="image">
                     <small>(*.gif , *.jpg ,*.png < 2000kb)</small><br>
+                    @if($obj->img != '')
+                        {!! Html::image('/upload/articles/'.$obj->img, 'img', array( 'width' => 100, 'height' => 100 )) !!}
+                    @else
+                        {!! Html::image('/upload/noimage.gif', 'img', array( 'width' => 100, 'height' => 100 )) !!}
+                    @endif
                 </div>
 
                 <div class="form-group">
                     <label>Title</label>
-                    <input class="form-control" placeholder="Enter text" name="title">
+                    <input class="form-control" placeholder="Enter text" name="title" value="{!! $obj->title !!}">
                 </div>
 
                 <div class="form-group">
                     <label>Description</label>
-                    <textarea class="form-control" rows="3" name="desc"></textarea>
+                    <textarea class="form-control" rows="3" name="desc">{!! $obj->desc !!}</textarea>
                 </div>
 
                 <div class="form-group">
                     <label>Full Text</label>
-                    <textarea class="ckeditor form-control" rows="3"name="fulltext" ></textarea>
+                    <textarea class="ckeditor form-control" rows="3" name="fulltext">{!! $obj->fulltext !!}</textarea>
                 </div>
 
                 <h1>SEO's</h1>
 
                 <div class="form-group">
                     <label>Keywords</label>
-                    <input class="form-control" placeholder="Enter text" name="keywords">
+                    <input class="form-control" placeholder="Enter text" name="keywords" value="{!! $obj_seo->keywords !!}">
                 </div>
 
                 <div class="form-group">
                     <label>Description</label>
-                    <textarea class="form-control" rows="3" name="description"></textarea>
+                    <textarea class="form-control" rows="3" name="description">{!! $obj_seo->description !!}</textarea>
                 </div>
 
                 <div class="form-group">
                     <label>Author</label>
-                    <input class="form-control" placeholder="Enter text" name="author">
+                    <input class="form-control" placeholder="Enter text" name="author" value="{!! $obj_seo->author !!}">
                 </div>
 
                 <div class="form-group">
                     <label>Google publisher</label>
-                    <input class="form-control" placeholder="Enter text" name="google_publisher">
+                    <input class="form-control" placeholder="Enter text" name="google_publisher" value="{!! $obj_seo->google_publisher !!}">
                 </div>
 
                 <div class="form-group">
                     <label>Google author</label>
-                    <input class="form-control" placeholder="Enter text" name="google_author">
+                    <input class="form-control" placeholder="Enter text" name="google_author" value="{!! $obj_seo->google_author !!}">
                 </div>
 
                 <div class="form-group">
                     <label>Facebook id</label>
-                    <input class="form-control" placeholder="Enter text" name="facebook_id">
+                    <input class="form-control" placeholder="Enter text" name="facebook_id" value="{!! $obj_seo->facebook_id !!}">
                 </div>
 
                 <div class="form-group">
                     <label>Og title</label>
-                    <input class="form-control" placeholder="Enter text" name="og_title">
+                    <input class="form-control" placeholder="Enter text" name="og_title" value="{!! $obj_seo->og_title !!}">
                 </div>
 
                 <div class="form-group">
                     <label>Og description</label>
-                    <input class="form-control" placeholder="Enter text" name="og_description">
+                    <input class="form-control" placeholder="Enter text" name="og_description" value="{!! $obj_seo->og_description !!}">
                 </div>
 
-                <button type="submit" class="btn btn-default">Save</button>
-                <button type="continous" class="btn btn-default">Save & Continues</button>
-                <button type="reset" class="btn btn-default">Reset</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+                {!! Html::decode(Html::link('admin/articles','<button type="button" class="btn btn-danger">Cancel</button>')) !!}
 
             </div>
             <div class="col-lg-6">
+                
                 <h1>English Content</h1>
 
                 <fieldset id="fs" disabled>
@@ -158,22 +168,27 @@
                             <label>Image</label>
                             <input type="file" name="image_en">
                             <small>(*.gif , *.jpg ,*.png < 2000kb)</small><br>
+                            @if($obj_en->img != '')
+                                {!! Html::image('/upload/articles/'.$obj_en->img, 'img', array( 'width' => 100, 'height' => 100 )) !!}
+                            @else
+                                {!! Html::image('/upload/noimage.gif', 'img', array( 'width' => 100, 'height' => 100 )) !!}
+                            @endif
                     </div>
                 </fieldset>
 
                 <div class="form-group">
                     <label>Title</label>
-                    <input class="form-control" placeholder="Enter text" name="title_en">
+                    <input class="form-control" placeholder="Enter text" name="title_en" value="{!! $obj_en->name !!}">
                 </div>
 
                 <div class="form-group">
                     <label>Description</label>
-                    <textarea class="form-control" rows="3" name="desc_en"></textarea>
+                    <textarea class="form-control" rows="3" name="desc_en">{!! $obj_en->desc !!}</textarea>
                 </div>
 
                 <div class="form-group">
                     <label>Full Text</label>
-                    <textarea class="ckeditor form-control" rows="3" name="fulltext_en"></textarea>
+                    <textarea class="ckeditor form-control" rows="3" name="fulltext_en">{!! $obj_en->fulltext !!}</textarea>
                 </div>
 
                 <h1>Japan Content</h1>
@@ -183,24 +198,28 @@
                             <label>Image</label>
                             <input type="file" name="image_ja">
                             <small>(*.gif , *.jpg ,*.png < 2000kb)</small><br>
+                            @if($obj_ja->img != '')
+                                {!! Html::image('/upload/articles/'.$obj_ja->img, 'img', array( 'width' => 100, 'height' => 100 )) !!}
+                            @else
+                                {!! Html::image('/upload/noimage.gif', 'img', array( 'width' => 100, 'height' => 100 )) !!}
+                            @endif
                     </div>
                 </fieldset>
 
                 <div class="form-group">
                     <label>Title</label>
-                    <input class="form-control" placeholder="Enter text" name="title_ja">
+                    <input class="form-control" placeholder="Enter text" name="title_ja" value="{!! $obj_ja->name !!}">
                 </div>
 
                 <div class="form-group">
                     <label>Description</label>
-                    <textarea class="form-control" rows="3" name="desc_ja"></textarea>
+                    <textarea class="form-control" rows="3" name="desc_ja">{!! $obj_ja->desc !!}</textarea>
                 </div>
 
                 <div class="form-group">
                     <label>Full Text</label>
-                    <textarea class="ckeditor form-control" rows="3" name="fulltext_ja"></textarea>
+                    <textarea class="ckeditor form-control" rows="3" name="fulltext_ja">{!! $obj_ja->fulltext !!}</textarea>
                 </div>
-                
             </div>
         </div>
         {!! Form::close() !!}

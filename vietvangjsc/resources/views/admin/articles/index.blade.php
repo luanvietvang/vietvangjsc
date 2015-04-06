@@ -24,7 +24,7 @@
                 </div>
                 <!-- Show message -->
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-6">
                         {!! $msg !!}
                     </div>
                 </div>
@@ -41,10 +41,11 @@
                     <div class="col-lg-12">
                         <h2>Articles</h2>
                         <div class="table-responsive">
+                            {!! Form::open(array('action' => 'AdminController@articlesMutiDel')) !!}
                             <table class="table table-bordered table-hover table-striped">
                                 <thead>
                                     <tr>
-                                        <th><input type="checkbox"> All</th>
+                                        <th><input type="checkbox" onclick="chon()" id="check_all"> All</th>
                                         <th>No.</th>
                                         <th>Title</th>
                                         <th>Img</th>
@@ -58,28 +59,39 @@
                                 <tbody>
                                     @for ($i = 0; $i < count($arts); $i++)
                                     <tr class="active">
-                                        <td><input type="checkbox"></td>
+                                        <td><input type="checkbox" onclick="chon_item(this.checked)" name="item[]" id="item[]" value="{!! $arts[$i]->id !!}" ></td>
                                         <td>{!! $i + 1 !!}</td>
                                         <td>{!! $arts[$i]->title !!}</td>
-                                        <td>{!! $arts[$i]->img !!}</td>
+                                        <td class="text-center">{!! Html::image('/upload/articles/'.$arts[$i]->img, 'img', array( 'width' => 70, 'height' => 70 )) !!}</td>
                                         <td>{!! $arts[$i]->desc !!}</td>
                                         <td>{!! $arts[$i]->category_id !!}</td>
                                         <td>{!! $arts[$i]->menu_id !!}</td>
                                         <td>{!! $arts[$i]->created_at !!}</td>
                                         <td>
                                             <button type="button" class="btn btn-xs btn-info">Info</button>
-                                            <button type="button" class="btn btn-xs btn-warning">Edit</button>
+                                            {!! Html::decode(Html::link('admin/articles/edit/'. $arts[$i]->id,'<button type="button" class="btn btn-xs btn-warning">Edit</button>')) !!}
                                             {!! Html::decode(Html::link('admin/articles/del/'. $arts[$i]->id,'<button type="button" class="btn btn-xs btn-danger">Del</button>')) !!}
                                         </td>
                                     </tr>
                                     @endfor
                                 </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="9">
+                                        {!! Html::decode(Html::link('admin/articles/add','<button type="button" class="btn btn-primary">Add</button>')) !!}
+                                        <button type="Submit" class="btn btn-danger">Del</button>
+                                        
+                                        <div class="col-md-12 text-center">
+                                            {!! $arts->render() !!}         
+                                        </div> <!-- End .pagination -->
+                                    </td>
+                                </tr>
+                            </tfoot>
                             </table>
+                            {!! Form::close() !!} 
                         </div>
                     </div>
-                    <div class="col-md-12 text-center">
-                        {!! $arts->render() !!}         
-                    </div>
+                    
 
                 </div>
                 <!-- /.row -->

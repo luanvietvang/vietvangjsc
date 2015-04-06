@@ -8,10 +8,14 @@ CKEDITOR.editorConfig = function( config ) {
 	// config.language = 'fr';
 	// config.uiColor = '#AADC6E';
 
-	config.filebrowserBrowseUrl= '/ckfinder/ckfinder.html';
-    config.filebrowserImageBrowseUrl= '/ckfinder/ckfinder.html?Type=Images';
-    config.filebrowserFlashBrowseUrl= '/ckfinder/ckfinder.html?Type=Flash';
-    config.filebrowserUploadUrl= '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files';
-    config.filebrowserImageUploadUrl= '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images';
-    config.filebrowserFlashUploadUrl= '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash';
+	//khi len host
+	//var base_url = window.location.origin + '/public'
+	//native local
+	var base_url = 'http://localhost:88/vietvangjsc/vietvangjsc/public';
+	config.filebrowserBrowseUrl= base_url + '/ckfinder/ckfinder.html';
+    config.filebrowserImageBrowseUrl= base_url + '/ckfinder/ckfinder.html?Type=Images';
+    config.filebrowserFlashBrowseUrl= base_url + '/ckfinder/ckfinder.html?Type=Flash';
+    config.filebrowserUploadUrl= base_url + '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files';
+    config.filebrowserImageUploadUrl= base_url + '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images';
+    config.filebrowserFlashUploadUrl= base_url + '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash';
 };

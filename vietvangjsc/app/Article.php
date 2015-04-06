@@ -4,6 +4,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Input;
+use Validator;
 
 class Article extends MyModel{
 	/**
@@ -20,6 +22,8 @@ class Article extends MyModel{
 	protected $table_SEO = 'seos';
 	protected $fields_SEO = array();
 
+	protected $_url;//URL::to('public/upload/articles');
+
 
 	/**
 	 * The attributes that are mass assignable.
@@ -30,6 +34,7 @@ class Article extends MyModel{
 
 	public function __construct(){
 		parent::__construct('articles');
+		$this->_url = base_path('public/upload/articles');
 	}
 	//Huynh Dung added on 2015/03/12
 	// public function initialize($table = null){
@@ -123,6 +128,52 @@ class Article extends MyModel{
 	}
 
 	//Admin - Huynh dung add on 2015/03/10	
+	public static function validate($input) {
+
+        $rules = array(
+                'category_id' => array( 'required', 'numeric', 'min:1' ),
+		        'menu_id' => array( 'required', 'numeric', 'min:1'  ),
+		        //'image' => array( 'required'),
+		        'title' => array( 'required', 'max:255' ),
+		        'desc' => array( 'required'),
+		        'fulltext' => array( 'required' ),
+		        'image_en' => array( 'image' ),
+		        'title_en' => array( 'required_with:desc_en,fulltext_en', 'max:255' ),
+		        'desc_en' => array( 'required_with:title_en,fulltext_en' ),
+		        'fulltext_en' => array( 'required_with:title_en,desc_en'),
+		        'image_ja' => array( 'image' ),
+		        'title_ja' => array( 'required_with:desc_ja,fulltext_ja', 'max:255' ),
+		        'desc_ja' => array( 'required_with:title_ja,fulltext_ja' ),
+		        'fulltext_ja' => array( 'required_with:title_ja,desc_ja' ),
+		        'keywords' => array( 'required', 'max:500' ),
+		        'description' => array( 'max:500' ),
+		        'author' => array( 'max:255' ),
+		        'google_publisher' => array( 'max:255' ),
+		        'google_author' => array( 'max:255' ),
+		        'facebook_id' => array( 'max:255' ),
+		        'og_title' => array( 'max:255' ),
+		        'og_description' => array( 'max:255' )
+        );
+
+        return Validator::make($input, $rules);
+	}
+
+	/**
+	 * Read a record
+	 *
+	 * @return array
+	 */
+	public static function read($id){
+		$res = Article::where('id', '=', $id)
+						->first();
+		return $res;
+	}
+
+	/**
+	 * Read all record
+	 *
+	 * @return array
+	 */
 	public static function getAll(){
 		$result = Article::leftJoin('categories', function($join) {
 					  $join->on('articles.category_id', '=', 'categories.id');
@@ -138,6 +189,11 @@ class Article extends MyModel{
 		return $result;
 	}
 
+	/**
+	 * Search 
+	 *
+	 * @return array
+	 */
 	public static function getSearch($keyword){
 		
 		$result = Article::where('title', 'LIKE', '%'.$keyword.'%')
@@ -147,13 +203,24 @@ class Article extends MyModel{
 		return $result;
 	}
 
+	/**
+	 * Del a record 
+	 *
+	 * @return true, false
+	 */
 	public static function Del($id){
 		$result = Article::where('id', $id)->update(['deleted_at' => Carbon::now()]);
 		if($result) return true;
 		else return false;
 	}
 
+	/**
+	 * Insert new record 
+	 *
+	 * @return true, false
+	 */
 	public function Insert($dataVi, $dataLang, $dataSEO){
+		$result = false;
 		try {
 			//get list column
 			$this->fields = DB::connection()->getSchemaBuilder()->getColumnListing($this->table);
@@ -163,24 +230,49 @@ class Article extends MyModel{
 			$this->fields_SEO = DB::connection()->getSchemaBuilder()->getColumnListing($this->table_SEO);
 
 			DB::beginTransaction();
+			//Upload img
+			$filename = $this->uploadImg(Input::file('image'), $this->_url, 100, 80);
+			$filename_en = null;
+			$filename_ja = null;
+			if(!Input::get('ckimg')){
+				if($_FILES['image_en']['name'] != '')
+					$filename_en = $this->uploadImg(Input::file('image_en'), $this->_url, 100, 80);
+				if($_FILES['image_ja']['name'] != '')
+					$filename_ja = $this->uploadImg(Input::file('image_ja'), $this->_url, 100, 80);
+			}
+
 			//Insert to Articles
 			$arr = array();
 			foreach ($this->fields as $v) {
 				if(isset($dataVi[$v])){
 					$arr[$v] = $dataVi[$v];
+					if($v == 'img')
+						$arr[$v] = $filename;
+					else $arr[$v] = $dataVi[$v];
 				}
 			}
 			$id = Article::insertGetId($arr);
 
 			//Insert to Languages
+			$lang=null;
 			if($dataLang != null){
 				$arrLang = array();
 				foreach ($dataLang as $Lang) {
 					foreach ($this->fields_Lang as $v) {
 						if(isset($Lang[$v])){
-							if($Lang[$v] == 'item_id')
+							if($v == 'item_id')
 								$arrLang[$v] = $id;
-							else $arrLang[$v] = $Lang[$v];
+							elseif($v == 'img')
+								if($lang == 'en')
+									$arrLang[$v] = $filename_en;
+								else
+									$arrLang[$v] = $filename_ja;
+							else{ 
+								if($v == 'lang'){
+									$lang = $Lang[$v];
+								}
+								$arrLang[$v] = $Lang[$v];
+							}
 						}
 					}
 					DB::table($this->table_Lang)->insert($arrLang);
@@ -191,12 +283,85 @@ class Article extends MyModel{
 			$arrSEO = array();
 			foreach ($this->fields_SEO as $v) {
 				if(isset($dataSEO[$v])){
-					if($dataSEO[$v] == 'item_id')
+					if($v == 'item_id')
 							$arrSEO[$v] = $id;
 					else $arrSEO[$v] = $dataSEO[$v];
 				}
 			}
 			DB::table($this->table_SEO)->insert($arrSEO);
+
+			//commit
+			$result = true;
+			DB::commit();
+		} catch (Exception $e) {
+			$result = false;
+			DB::rollback();
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Update record 
+	 *
+	 * @return true, false
+	 */
+	public function _Update($dataVi, $dataLang, $dataSEO,$id){
+		$result = false;
+		try {
+			//get list column
+			$this->fields = DB::connection()->getSchemaBuilder()->getColumnListing($this->table);
+			//get list column of Languages table
+			$this->fields_Lang = DB::connection()->getSchemaBuilder()->getColumnListing($this->table_Lang);
+			//get list column of Seos table
+			$this->fields_SEO = DB::connection()->getSchemaBuilder()->getColumnListing($this->table_SEO);
+
+			DB::beginTransaction();
+			$filename = $this->read($id)->img;
+			if($_FILES['image']['name'] != ''){
+				//del old image
+				unlink($this->_url.'/'.$filename);
+				//Upload img
+				$filename = $this->uploadImg(Input::file('image'), $this->_url, 100, 80);
+
+			}
+			//Update to Articles
+			$arr = array();
+			foreach ($this->fields as $v) {
+				if(isset($dataVi[$v])){
+					$arr[$v] = $dataVi[$v];
+					if($v == 'img')
+						$arr[$v] = $filename;
+					else $arr[$v] = $dataVi[$v];
+				}
+			}
+			Article::where('id','=',$id)->update($arr);
+
+			//Update to Languages
+			$lang=null;
+			if($dataLang != null){
+				$arrLang = array();
+				foreach ($dataLang as $Lang) {
+					foreach ($this->fields_Lang as $v) {
+						if(isset($Lang[$v])){
+							if($v == 'lang') //get lang
+								$lang = $Lang[$v];
+							$arrLang[$v] = $Lang[$v];
+						}
+					}
+					DB::table($this->table_Lang)->where(array('item_id' => $id, 'lang' => $lang))
+					->update($arrLang);
+				}
+			}
+
+			//Update to SEO
+			$arrSEO = array();
+			foreach ($this->fields_SEO as $v) {
+				if(isset($dataSEO[$v])){
+					$arrSEO[$v] = $dataSEO[$v];
+				}
+			}
+			DB::table($this->table_SEO)->where('item_id','=',$id)->update($arrSEO);
 
 			//commit
 			$result = true;

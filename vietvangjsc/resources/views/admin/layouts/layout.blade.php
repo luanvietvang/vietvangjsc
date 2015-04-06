@@ -54,9 +54,15 @@
     <script src="{{ URL::to('admin/js/bootstrap.min.js') }}"></script>
 
     <!-- Morris Charts JavaScript -->
-    <script src="{{ URL::to('public/js/plugins/morris/raphael.min.js') }}"></script>
+    <script src="{{ URL::to('js/plugins/morris/raphael.min.js') }}"></script>
     <script src="{{ URL::to('admin/js/plugins/morris/morris.min.js') }}"></script>
     <script src="{{ URL::to('admin/js/plugins/morris/morris-data.js') }}"></script>
+
+    <!-- Ckediter -->
+    <script src="{{ URL::to('ckeditor/ckeditor.js') }}"></script>
+
+    <!-- My javascript -->
+    <script src="{{ URL::to('admin/js/func.js') }}"></script>
 </body>
 	<!--End body tag-->
 </html>
