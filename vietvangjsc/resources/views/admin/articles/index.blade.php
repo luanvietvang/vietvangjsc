@@ -39,8 +39,8 @@
                 <!-- </div> -->
                 <div class="row">
                     <div class="col-lg-12">
-                        <h2>{!! $title !!}</h2>
-                        <div class="table-responsive">
+<!--                         <h2>{!! $title !!}</h2>
+ -->                        <div class="table-responsive">
                             {!! Form::open(array('action' => 'AdminController@articlesMutiDel')) !!}
                             <table class="table table-bordered table-hover table-striped">
                                 <thead>
