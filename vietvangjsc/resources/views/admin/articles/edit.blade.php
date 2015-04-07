@@ -70,12 +70,12 @@
                     <label>Hit</label>
                     <div class="radio">
                         <label>
-                            <input type="radio" name="hit" id="hit" value="1" checked>Yes
+                            <input type="radio" name="hit" id="hit" value="1" @if($obj->hit == 1) checked @endif>Yes
                         </label>
                     </div>
                     <div class="radio">
                         <label>
-                            <input type="radio" name="hit" id="hit" value="0">No
+                            <input type="radio" name="hit" id="hit" value="0" @if($obj->hit == 0) checked @endif>No
                         </label>
                     </div>
                 </div>
