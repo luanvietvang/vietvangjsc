@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Input;
 use Validator;
+use App\Language;
+use File;
 
 class Article extends MyModel{
 	/**
@@ -169,6 +171,20 @@ class Article extends MyModel{
 		return $res;
 	}
 
+	public static function readDetail($id){
+		$res =  Article::leftJoin('categories', function($join) {
+					  $join->on('articles.category_id', '=', 'categories.id');
+				   })
+				->leftJoin('menus', function($join) {
+					  $join->on('articles.menu_id', '=', 'menus.id');
+				   })
+				->where('articles.id','=',$id)
+				->select('articles.id as id', 'articles.title as title', 'articles.img as img', 'articles.desc as desc', 'articles.fulltext as fulltext', 
+					'articles.created_at as created_at', 'articles.updated_at as updated_at', 'menus.name as menu_id', 'categories.name as category_id')
+				->first();
+		return $res;
+	}
+
 	/**
 	 * Read all record
 	 *
@@ -317,13 +333,39 @@ class Article extends MyModel{
 			$this->fields_SEO = DB::connection()->getSchemaBuilder()->getColumnListing($this->table_SEO);
 
 			DB::beginTransaction();
+			//image articles
 			$filename = $this->read($id)->img;
 			if($_FILES['image']['name'] != ''){
 				//del old image
-				unlink($this->_url.'/'.$filename);
+				if (File::exists($this->_url.'/'.$filename))
+					unlink($this->_url.'/'.$filename);
 				//Upload img
 				$filename = $this->uploadImg(Input::file('image'), $this->_url, 100, 80);
 
+			}
+			//image en
+			$filename_en = Language::read($id,'articles','en')->img;
+			if(isset($_FILES['image_en']))
+			{
+				if($_FILES['image_en']['name'] != ''){
+					//del old image
+					if (File::exists($this->_url.'/'.$filename_en))
+						unlink($this->_url.'/'.$filename_en);
+					//Upload img
+					$filename_en = $this->uploadImg(Input::file('image_en'), $this->_url, 100, 80);
+				}
+			}
+			//image ja
+			$filename_ja = Language::read($id,'articles','ja')->img;
+			if(isset($_FILES['image_ja']))
+			{
+				if($_FILES['image_ja']['name'] != ''){
+					//del old image
+					if (File::exists($this->_url.'/'.$filename_ja))
+						unlink($this->_url.'/'.$filename_ja);
+					//Upload img
+					$filename_ja = $this->uploadImg(Input::file('image_ja'), $this->_url, 100, 80);
+				}
 			}
 			//Update to Articles
 			$arr = array();
@@ -344,9 +386,17 @@ class Article extends MyModel{
 				foreach ($dataLang as $Lang) {
 					foreach ($this->fields_Lang as $v) {
 						if(isset($Lang[$v])){
-							if($v == 'lang') //get lang
-								$lang = $Lang[$v];
-							$arrLang[$v] = $Lang[$v];
+							if($v == 'img')
+								if($lang == 'en')
+									$arrLang[$v] = $filename_en;
+								else
+									$arrLang[$v] = $filename_ja;
+							else{ 
+								if($v == 'lang'){
+									$lang = $Lang[$v];
+								}
+								$arrLang[$v] = $Lang[$v];
+							}
 						}
 					}
 					DB::table($this->table_Lang)->where(array('item_id' => $id, 'lang' => $lang))

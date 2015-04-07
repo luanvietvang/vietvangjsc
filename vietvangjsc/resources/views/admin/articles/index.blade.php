@@ -39,7 +39,7 @@
                 <!-- </div> -->
                 <div class="row">
                     <div class="col-lg-12">
-                        <h2>Articles</h2>
+                        <h2>{!! $title !!}</h2>
                         <div class="table-responsive">
                             {!! Form::open(array('action' => 'AdminController@articlesMutiDel')) !!}
                             <table class="table table-bordered table-hover table-striped">
@@ -68,7 +68,7 @@
                                         <td>{!! $arts[$i]->menu_id !!}</td>
                                         <td>{!! $arts[$i]->created_at !!}</td>
                                         <td>
-                                            <button type="button" class="btn btn-xs btn-info">Info</button>
+                                            {!! Html::decode(Html::link('admin/articles/detail/'. $arts[$i]->id,'<button type="button" class="btn btn-xs btn-info">Info</button>')) !!}
                                             {!! Html::decode(Html::link('admin/articles/edit/'. $arts[$i]->id,'<button type="button" class="btn btn-xs btn-warning">Edit</button>')) !!}
                                             {!! Html::decode(Html::link('admin/articles/del/'. $arts[$i]->id,'<button type="button" class="btn btn-xs btn-danger">Del</button>')) !!}
                                         </td>

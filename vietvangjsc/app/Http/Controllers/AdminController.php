@@ -39,7 +39,7 @@ class AdminController extends Controller {
 	 *
 	 * @return void
 	 */
-	public function __construct()//ArticlesFormValidator $validator)
+	public function __construct()
 	{
 		//$this->middleware('auth');
 		$this->msg = Ini::message(true);
@@ -83,6 +83,28 @@ class AdminController extends Controller {
 				'arts' 	=> $arts,
 				'kw' 	=> $kw
 			]);
+	}
+
+	/**
+	 * Add new articles [add].
+	 *
+	 * @return Response
+	 */
+	public function articlesDetail($id)
+	{
+		$title = 'Article [Detail]';
+
+		$obj = Article::readDetail($id);
+		$obj_en = Language::read($id,'articles','en');
+		$obj_ja = Language::read($id,'articles','ja');
+		$obj_seo = Seo::read($id);
+		return view('admin.articles.detail')->with([
+				'title' => $title,
+				'obj' => $obj,
+				'obj_en' => $obj_en,
+				'obj_ja' => $obj_ja,
+				'obj_seo' => $obj_seo
+		]);
 	}
 
 	/**
@@ -193,21 +215,13 @@ class AdminController extends Controller {
 			session($msg);
 
 			// return Redirect::back();
-			return view('admin.articles.add')->with([
-					'msg' => $this->msg,
-					'title' => $title,
-					'cate' => $cate,
-					'menu' => $menu
-				]);
+			if(isset($_POST['continue']))
+				return redirect()->action('AdminController@articlesAdd');
+			else return redirect()->action('AdminController@articles');
 		}
 		 else {
 		 	// Input::flash();
-            return view('admin.articles.add')->with([
-				'msg' => $this->msg,
-				'title' => $title,
-				'cate' => $cate,
-				'menu' => $menu
-			])->withErrors( $v->getMessageBag());
+            return redirect()->action('AdminController@articlesAdd')->withErrors( $v->getMessageBag());
         }
 	}
 
@@ -243,16 +257,6 @@ class AdminController extends Controller {
 
 	public function articlesEdit_sm()
 	{
-		//Set title
-		$title = 'Article [Edit]';
-
-		//Get List categorie
-		$cate = Category::getLstCategoriesVi();
-		$menu = $this->printLstMenuVi(Menu::getMenuVi(),0, '-');
-		//$_input = Input::all();
-		// if (!Input::get('ckimg').checked) {
-		// 	# code...
-		// }
 		$id = Input::get('id');
 		$v = Article::validate(Input::all());
 		if ( $v->passes() ) {
@@ -330,12 +334,6 @@ class AdminController extends Controller {
 
 			// return Redirect::back();
 			return redirect()->action('AdminController@articles');
-			// return view('admin.articles.index')->with([
-			// 		'msg' => $this->msg,
-			// 		'title' => 'Article',
-			// 		'kw' => '',
-			// 		'arts' => Article::getAll()
-			// 	]);
 		}
 		 else {
 		 	// Input::flash();
@@ -404,7 +402,6 @@ class AdminController extends Controller {
 		}
 		session($msg);
 		return Redirect::back();
-		//return Redirect::to('admin/articles/');
 	}
 	
 	public function printLstMenuVi($lstMenu, $parent_id, $char){
@@ -424,7 +421,7 @@ class AdminController extends Controller {
 					array_push($this->resmenu,'<option selected="selected" value="'.$v->id.'">'.$char.$v->name.'</option>');
 				else
 					array_push($this->resmenu,'<option value="'.$v->id.'">'.$char.$v->name.'</option>');
-				$this->printLstMenuVi($lstMenu, $v->id, $char.$char, $id);
+				$this->printLstMenuViEdit($lstMenu, $v->id, $char.$char, $id);
 			}
 		}
 		return $this->resmenu;

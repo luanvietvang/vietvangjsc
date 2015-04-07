@@ -18,6 +18,10 @@ class Menu extends Model{
 	 */
 	protected $fillable = ['id', 'alias', 'name', 'parent_id'];
 
+	// public function __construct(){
+	// 	parent::__construct('menus');
+	// }
+
 	public static function getMenu($lang, $parent_id){
 		if ($lang == "vi") {
 			$result = Menu::where('parent_id', '=', $parent_id)
@@ -53,4 +57,17 @@ class Menu extends Model{
 		if(is_null($result)) return false;
 		return true;
 	}
+
+	//Huynh Dung Add
+	/**
+	 * Read a record
+	 *
+	 * @return array
+	 */
+	public static function read($id){
+		$res = Menu::where('id', '=', $id)
+						->first();
+		return $res;
+	}
+
 }

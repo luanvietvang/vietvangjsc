@@ -64,7 +64,8 @@ Route::get('admin/articles/edit/{id?}', 'AdminController@articlesEdit')->where(a
 Route::post('admin/articles/edit', 'AdminController@articlesEdit_sm');
 Route::any('admin/articles/del/{id?}', 'AdminController@articlesDel')->where(array('id' => '[0-9]+'));
 Route::any('admin/articles/MutiDel', 'AdminController@articlesMutiDel');
-//Route::get('admin/articles/?page={no}', 'AdminController@articles')->where(array('no' => '[0-9]+'));
+Route::get('admin/articles/detail/{id?}', 'AdminController@articlesDetail')->where(array('id' => '[0-9]+'));
+//Route::get('admin/articles?page={no}', 'AdminController@articles')->where(array('no' => '[0-9]+'));
 //Route::get('admin/categories', 'AdminController@categories');
 Route::get('admin/menus', 'AdminController@menus');
 Route::get('admin/products', 'AdminController@products');

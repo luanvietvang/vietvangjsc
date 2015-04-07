@@ -18,6 +18,10 @@ class Category extends Model{
 	 */
 	protected $fillable = ['id', 'alias', 'name', 'logo', 'desc'];
 
+	// public function __construct(){
+	// 	parent::__construct('categories');
+	// }
+
 	public static function getCategories($lang){
 		if ($lang == "vi") {
 			$result = Category::select('id as id', 'alias as alias', 'name as name', 'logo as logo', 'desc as desc')
@@ -35,9 +39,22 @@ class Category extends Model{
 		return $result;
 	}
 
+	//Huynh Dung Add
+	/**
+	 * Read a record
+	 *
+	 * @return array
+	 */
 	public static function getLstCategoriesVi(){
 		$result = Category::select('id as id', 'name as name')
 					->get();
 		return $result;
 	}
+
+	public static function read($id){
+		$res = Category::where('id', '=', $id)
+						->first();
+		return $res;
+	}
+
 }

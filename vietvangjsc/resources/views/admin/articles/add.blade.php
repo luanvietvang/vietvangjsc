@@ -145,8 +145,8 @@
                     <input class="form-control" placeholder="Enter text" name="og_description">
                 </div>
 
-                <button type="submit" class="btn btn-default">Save</button>
-                <button type="continous" class="btn btn-default">Save & Continues</button>
+                <button type="submit"  class="btn btn-default">Save</button>
+                <button type="submit" name="continue" class="btn btn-default">Save & Continues</button>
                 <button type="reset" class="btn btn-default">Reset</button>
 
             </div>
