@@ -55,6 +55,8 @@ class AdminController extends Controller {
 	public function index()
 	{
 		//do something
+		#check login here
+		# Code....
 		return view('admin.index');
 	}
 
@@ -220,7 +222,7 @@ class AdminController extends Controller {
 			else return redirect()->action('AdminController@articles');
 		}
 		 else {
-		 	// Input::flash();
+		 	Input::flash();
             return redirect()->action('AdminController@articlesAdd')->withErrors( $v->getMessageBag());
         }
 	}
@@ -336,7 +338,7 @@ class AdminController extends Controller {
 			return redirect()->action('AdminController@articles');
 		}
 		 else {
-		 	// Input::flash();
+		 	Input::flash();
 			return redirect()->action('AdminController@articlesEdit', [$id])
 			->withErrors( $v->getMessageBag());;
         }

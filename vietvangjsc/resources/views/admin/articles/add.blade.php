@@ -90,59 +90,59 @@
 
                 <div class="form-group">
                     <label>Title</label>
-                    <input class="form-control" placeholder="Enter text" name="title">
+                    <input class="form-control" placeholder="Enter text" name="title" value="{!! Input::old('title') !!}">
                 </div>
 
                 <div class="form-group">
                     <label>Description</label>
-                    <textarea class="form-control" rows="3" name="desc"></textarea>
+                    <textarea class="form-control" rows="3" name="desc">{!! Input::old('desc') !!}</textarea>
                 </div>
 
                 <div class="form-group">
                     <label>Full Text</label>
-                    <textarea class="ckeditor form-control" rows="3"name="fulltext" ></textarea>
+                    <textarea class="ckeditor form-control" rows="3"name="fulltext">{!! Input::old('fulltext') !!}</textarea>
                 </div>
 
                 <h1>SEO's</h1>
 
                 <div class="form-group">
                     <label>Keywords</label>
-                    <input class="form-control" placeholder="Enter text" name="keywords">
+                    <input class="form-control" placeholder="Enter text" name="keywords" value="{!! Input::old('keywords') !!}">
                 </div>
 
                 <div class="form-group">
                     <label>Description</label>
-                    <textarea class="form-control" rows="3" name="description"></textarea>
+                    <textarea class="form-control" rows="3" name="description">{!! Input::old('description') !!}</textarea>
                 </div>
 
                 <div class="form-group">
                     <label>Author</label>
-                    <input class="form-control" placeholder="Enter text" name="author">
+                    <input class="form-control" placeholder="Enter text" name="author" value="{!! Input::old('author') !!}">
                 </div>
 
                 <div class="form-group">
                     <label>Google publisher</label>
-                    <input class="form-control" placeholder="Enter text" name="google_publisher">
+                    <input class="form-control" placeholder="Enter text" name="google_publisher" value="{!! Input::old('google_publisher') !!}">
                 </div>
 
                 <div class="form-group">
                     <label>Google author</label>
-                    <input class="form-control" placeholder="Enter text" name="google_author">
+                    <input class="form-control" placeholder="Enter text" name="google_author" value="{!! Input::old('google_author') !!}">
                 </div>
 
                 <div class="form-group">
                     <label>Facebook id</label>
-                    <input class="form-control" placeholder="Enter text" name="facebook_id">
+                    <input class="form-control" placeholder="Enter text" name="facebook_id" value="{!! Input::old('facebook_id') !!}">
                 </div>
 
                 <div class="form-group">
                     <label>Og title</label>
-                    <input class="form-control" placeholder="Enter text" name="og_title">
+                    <input class="form-control" placeholder="Enter text" name="og_title" value="{!! Input::old('og_title') !!}">
                 </div>
 
                 <div class="form-group">
                     <label>Og description</label>
-                    <input class="form-control" placeholder="Enter text" name="og_description">
+                    <input class="form-control" placeholder="Enter text" name="og_description" value="{!! Input::old('og_description') !!}">
                 </div>
 
                 <button type="submit"  class="btn btn-default">Save</button>
@@ -163,17 +163,17 @@
 
                 <div class="form-group">
                     <label>Title</label>
-                    <input class="form-control" placeholder="Enter text" name="title_en">
+                    <input class="form-control" placeholder="Enter text" name="title_en" value="{!! Input::old('title_en') !!}">
                 </div>
 
                 <div class="form-group">
                     <label>Description</label>
-                    <textarea class="form-control" rows="3" name="desc_en"></textarea>
+                    <textarea class="form-control" rows="3" name="desc_en">{!! Input::old('desc_en') !!}</textarea>
                 </div>
 
                 <div class="form-group">
                     <label>Full Text</label>
-                    <textarea class="ckeditor form-control" rows="3" name="fulltext_en"></textarea>
+                    <textarea class="ckeditor form-control" rows="3" name="fulltext_en">{!! Input::old('fulltext_en') !!}</textarea>
                 </div>
 
                 <h1>Japan Content</h1>
@@ -188,17 +188,17 @@
 
                 <div class="form-group">
                     <label>Title</label>
-                    <input class="form-control" placeholder="Enter text" name="title_ja">
+                    <input class="form-control" placeholder="Enter text" name="title_ja" value="{!! Input::old('title_ja') !!}">
                 </div>
 
                 <div class="form-group">
                     <label>Description</label>
-                    <textarea class="form-control" rows="3" name="desc_ja"></textarea>
+                    <textarea class="form-control" rows="3" name="desc_ja">{!! Input::old('desc_ja') !!}</textarea>
                 </div>
 
                 <div class="form-group">
                     <label>Full Text</label>
-                    <textarea class="ckeditor form-control" rows="3" name="fulltext_ja"></textarea>
+                    <textarea class="ckeditor form-control" rows="3" name="fulltext_ja">{!! Input::old('fulltext_ja') !!}</textarea>
                 </div>
                 
             </div>

@@ -55,7 +55,7 @@ Route::controllers([
 
 //ADMIN
 //Default route
-Route::get('admin', 'AdminController@index');
+Route::get('/admin', 'AdminController@index');
 Route::get('admin/index', 'AdminController@index');
 Route::any('admin/articles', 'AdminController@articles');
 Route::get('admin/articles/add', 'AdminController@articlesAdd');
