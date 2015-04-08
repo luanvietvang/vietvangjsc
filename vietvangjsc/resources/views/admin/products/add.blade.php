@@ -15,7 +15,7 @@
                         <i class="fa fa-dashboard"></i>  <a href="{{ URL::to('admin') }}">Dashboard</a>
                     </li>
                     <li class="active">
-                        <i class="fa fa-table"></i> <a href="{{ URL::to('admin/articles') }}">{!! $parent !!}</a>
+                        <i class="fa fa-table"></i> <a href="{{ URL::to('admin/products') }}">{!! $parent !!}</a>
                     </li>
                 </ol>
             </div>
@@ -38,7 +38,7 @@
             </div>
         </div>
         <!-- /.row -->
-        {!! Form::open(array('action' => 'AdminController@articlesAdd_sm','files' => true)) !!}
+        {!! Form::open(array('action' => 'AdminController@productsAdd_sm','files' => true,'id' => 'upload')) !!}
         <div class="row">
             <div class="col-lg-6">
 
@@ -52,30 +52,6 @@
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label>Menu</label>
-                    <select class="form-control" name="menu_id">
-                        <option value="0">Select</option>
-                        @foreach($menu as $mn)
-                            {!! $mn !!}
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Hit</label>
-                    <div class="radio">
-                        <label>
-                            <input type="radio" name="hit" id="hit" value="1" checked>Yes
-                        </label>
-                    </div>
-                    <div class="radio">
-                        <label>
-                            <input type="radio" name="hit" id="hit" value="0">No
-                        </label>
-                    </div>
-                </div>
-                
                  <div class="form-group">
                     <label>Image</label>
                     <div class="checkbox">
@@ -88,67 +64,36 @@
                     <small>(*.gif , *.jpg ,*.png < 2000kb)</small><br>
                 </div>
 
-                <div class="form-group">
-                    <label>Title</label>
-                    <input class="form-control" placeholder="Enter text" name="title" value="{!! Input::old('title') !!}">
+                <div id="drop">
+                        Drop Here
+
+                        <a>Browse</a>
+                        <input type="file" name="upl" multiple />
+                    <ul>
+                        <!-- The file uploads will be shown here -->
+                    </ul>
                 </div>
 
                 <div class="form-group">
+                    <label>Title</label>
+                    <input class="form-control" placeholder="Enter text" name="name" value="{!! Input::old('name') !!}">
+                </div>
+
+                 <div class="form-group">
                     <label>Description</label>
-                    <textarea class="form-control" rows="3" name="desc">{!! Input::old('desc') !!}</textarea>
+                    <textarea class="form-control" rows="3" name="note">{!! Input::old('note') !!}</textarea>
                 </div>
 
                 <div class="form-group">
                     <label>Full Text</label>
-                    <textarea class="ckeditor form-control" rows="3"name="fulltext">{!! Input::old('fulltext') !!}</textarea>
-                </div>
-
-                <h1>SEO's</h1>
-
-                <div class="form-group">
-                    <label>Keywords</label>
-                    <input class="form-control" placeholder="Enter text" name="keywords" value="{!! Input::old('keywords') !!}">
+                    <textarea class="ckeditor form-control" rows="3" name="desc">{!! Input::old('desc') !!}</textarea>
                 </div>
 
                 <div class="form-group">
-                    <label>Description</label>
-                    <textarea class="form-control" rows="3" name="description">{!! Input::old('description') !!}</textarea>
+                    <label>Customer</label>
+                    <input class="form-control" placeholder="Enter text" name="cutomer" value="{!! Input::old('cutomer') !!}">
                 </div>
-
-                <div class="form-group">
-                    <label>Author</label>
-                    <input class="form-control" placeholder="Enter text" name="author" value="{!! Input::old('author') !!}">
-                </div>
-
-                <div class="form-group">
-                    <label>Google publisher</label>
-                    <input class="form-control" placeholder="Enter text" name="google_publisher" value="{!! Input::old('google_publisher') !!}">
-                </div>
-
-                <div class="form-group">
-                    <label>Google author</label>
-                    <input class="form-control" placeholder="Enter text" name="google_author" value="{!! Input::old('google_author') !!}">
-                </div>
-
-                <div class="form-group">
-                    <label>Facebook id</label>
-                    <input class="form-control" placeholder="Enter text" name="facebook_id" value="{!! Input::old('facebook_id') !!}">
-                </div>
-
-                <div class="form-group">
-                    <label>Og title</label>
-                    <input class="form-control" placeholder="Enter text" name="og_title" value="{!! Input::old('og_title') !!}">
-                </div>
-
-                <div class="form-group">
-                    <label>Og description</label>
-                    <input class="form-control" placeholder="Enter text" name="og_description" value="{!! Input::old('og_description') !!}">
-                </div>
-
-                <button type="submit"  class="btn btn-primary">Save</button>
-                <button type="submit" name="continue" class="btn btn-success">Save & Continues</button>
-                <button type="reset" class="btn btn-default">Reset</button>
-
+               
             </div>
             <div class="col-lg-6">
                 <h1>English Content</h1>
@@ -202,6 +147,9 @@
                 </div>
                 
             </div>
+            <button type="submit"  class="btn btn-primary">Save</button>
+            <button type="submit" name="continue" class="btn btn-success">Save & Continues</button>
+            <button type="reset" class="btn btn-default">Reset</button>
         </div>
         {!! Form::close() !!}
         <!-- /.row -->

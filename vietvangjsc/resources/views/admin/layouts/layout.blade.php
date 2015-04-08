@@ -49,7 +49,8 @@
     <!-- /#wrapper -->
 
     <!-- jQuery -->
-    <script src="{{ URL::to('admin/js/jquery.js') }}"></script>
+    <!--<script src="{{ URL::to('admin/js/jquery.js') }}"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="{{ URL::to('admin/js/bootstrap.min.js') }}"></script>
@@ -64,6 +65,17 @@
 
     <!-- My javascript -->
     <script src="{{ URL::to('admin/js/func.js') }}"></script>
+
+    <!-- Upload mutil image -->
+    <script src="{{ URL::to('admin/js/jquery.knob.js') }}"></script>
+
+    <!-- jQuery File Upload Dependencies -->
+    <script src="{{ URL::to('admin/js/jquery.ui.widget.js') }}"></script>
+    <script src="{{ URL::to('admin/js/jquery.iframe-transport.js') }}"></script>
+    <script src="{{ URL::to('admin/js/jquery.fileupload.js') }}"></script>
+    
+    <!-- Our main JS file -->
+    <script src="{{ URL::to('admin/js/script.js') }}"></script>
 </body>
 	<!--End body tag-->
 </html>

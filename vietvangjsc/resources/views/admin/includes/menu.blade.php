@@ -21,10 +21,10 @@
         <a href="javascript:;" data-toggle="collapse" data-target="#products"><i class="fa fa-fw fa-arrows-v"></i> Products <i class="fa fa-fw fa-caret-down"></i></a>
         <ul id="products" class="collapse">
             <li>
-                <a href="#"><i class="fa fa-fw fa-table"></i> Products</a>
+                <a href="{{ URL::to('admin/products') }}"><i class="fa fa-fw fa-table"></i> Products</a>
             </li>
             <li>
-                <a href="#"><i class="fa fa-fw fa-edit"></i> Add Products</a>
+                <a href="{{ URL::to('admin/products/add') }}"><i class="fa fa-fw fa-edit"></i> Add Products</a>
             </li>
         </ul>
     </li>

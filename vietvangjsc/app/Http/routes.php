@@ -57,6 +57,7 @@ Route::controllers([
 //Default route
 Route::get('/admin', 'AdminController@index');
 Route::get('admin/index', 'AdminController@index');
+/*---------Articles-----------*/
 Route::any('admin/articles', 'AdminController@articles');
 Route::any('admin/articles/search', 'AdminController@articlesSearch');
 Route::get('admin/articles/add', 'AdminController@articlesAdd');
@@ -66,7 +67,16 @@ Route::post('admin/articles/edit', 'AdminController@articlesEdit_sm');
 Route::any('admin/articles/del/{id?}', 'AdminController@articlesDel')->where(array('id' => '[0-9]+'));
 Route::any('admin/articles/MutiDel', 'AdminController@articlesMutiDel');
 Route::get('admin/articles/detail/{id?}', 'AdminController@articlesDetail')->where(array('id' => '[0-9]+'));
-//Route::get('admin/articles?page={no}', 'AdminController@articles')->where(array('no' => '[0-9]+'));
-//Route::get('admin/categories', 'AdminController@categories');
+/*---------Products-----------*/
+Route::any('admin/products', 'AdminController@products');
+Route::any('admin/products/search', 'AdminController@productsSearch');
+Route::get('admin/products/add', 'AdminController@productsAdd');
+Route::post('admin/products/add', 'AdminController@productsAdd_sm');
+Route::get('admin/products/edit/{id?}', 'AdminController@productsEdit')->where(array('id' => '[0-9]+'));
+Route::post('admin/products/edit', 'AdminController@productsEdit_sm');
+Route::any('admin/products/del/{id?}', 'AdminController@productsDel')->where(array('id' => '[0-9]+'));
+Route::any('admin/products/MutiDel', 'AdminController@productsMutiDel');
+Route::get('admin/products/detail/{id?}', 'AdminController@productsDetail')->where(array('id' => '[0-9]+'));
+
 Route::get('admin/menus', 'AdminController@menus');
 Route::get('admin/products', 'AdminController@products');

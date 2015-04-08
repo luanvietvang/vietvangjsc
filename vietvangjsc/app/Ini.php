@@ -27,7 +27,7 @@ class Ini
 					// echo '<div class="notification ', $type_msg, ' png_bg"> <a href="#" class="close"><img src="', base_url(),'public/admin/images/icons/cross_grey_small.png" title="Close this notification" alt="close" /></a>
 					//   <div>', $msg, '</div>
 					// </div>';
-					echo '<div class="alert alert-',$type_msg,' alert-dismissable">
+					echo '<div class="alert alert-',$type_msg,' alert-dismissable text-center">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                             <i class="fa fa-info-circle"></i> ',$msg,' 
                         </div>';

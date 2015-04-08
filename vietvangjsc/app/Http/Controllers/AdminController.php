@@ -60,6 +60,7 @@ class AdminController extends Controller {
 		return view('admin.index');
 	}
 
+	/*--------------------------------- [ARTICLE]---------------------------------*/
 	/**
 	 * Show the form articles [index].
 	 *
@@ -69,14 +70,12 @@ class AdminController extends Controller {
 	{
 		//get all
 		$title = 'Article';
-		$kw = '';
 		$arts = Article::getAll();
 		
 		return view('admin.articles.index')->with([
 				'msg' => $this->msg,
 				'title' => $title,
-				'arts' 	=> $arts,
-				'kw' 	=> $kw
+				'arts' 	=> $arts
 			]);
 	}
 
@@ -146,16 +145,6 @@ class AdminController extends Controller {
 
 	public function articlesAdd_sm()
 	{
-		// //Set title
-		// $title = 'Article [Add]';
-
-		// //Get List categorie
-		// $cate = Category::getLstCategoriesVi();
-		// $menu = $this->printLstMenuVi(Menu::getMenuVi(),0, '-');
-		//$_input = Input::all();
-		// if (!Input::get('ckimg').checked) {
-		// 	# code...
-		// }
 		$v = Article::validate(Input::all());
 		if ( $v->passes() ) {
 			//Alias name vi 
@@ -355,7 +344,6 @@ class AdminController extends Controller {
 			return redirect()->action('AdminController@articles');
 		}
 		 else {
-		 	Input::flash();
 			return redirect()->action('AdminController@articlesEdit', [$id])
 			->withErrors( $v->getMessageBag());;
         }
@@ -423,6 +411,321 @@ class AdminController extends Controller {
 		return Redirect::back();
 	}
 	
+	/*--------------------------------- [PRODUCT]---------------------------------*/
+	/**
+	 * Show the form Product [index].
+	 *
+	 * @return Response
+	 */
+	public function products()
+	{
+		//get all
+		$title = 'Product';
+		$obj = Product::getAll();
+		
+		return view('admin.products.index')->with([
+				'msg' => $this->msg,
+				'title' => $title,
+				'obj' 	=> $obj
+			]);
+	}
+
+	/**
+	 * Show the form products [index].
+	 *
+	 * @return Response
+	 */
+	public function productsSearch()
+	{
+		$title = 'Product [Search]';
+		$parent = 'Product';
+		$kw = Input::get('keyword');
+		
+		$obj = Product::getSearch($kw);
+		return view('admin.products.search')->with([
+				'msg' => $this->msg,
+				'title' => $title,
+				'parent' => $parent,
+				'obj' 	=> $obj,
+				'kw' 	=> $kw
+			]);
+	}
+
+	/**
+	 * Add new products [add].
+	 *
+	 * @return Response
+	 */
+	public function productsDetail($id)
+	{
+		$title = 'Product [Detail]';
+
+		$obj = Product::readDetail($id);
+		$obj_en = Language::read($id,'products','en');
+		$obj_ja = Language::read($id,'products','ja');
+		$obj_seo = Seo::read($id);
+		return view('admin.products.detail')->with([
+				'title' => $title,
+				'obj' => $obj,
+				'obj_en' => $obj_en,
+				'obj_ja' => $obj_ja,
+				'obj_seo' => $obj_seo
+		]);
+	}
+
+	/**
+	 * Add new products [add].
+	 *
+	 * @return Response
+	 */
+	public function productsAdd()
+	{
+		$title = 'Product [Add]';
+		$parent = 'Product';
+		//Get List categories
+		$cate = Category::getLstCategoriesVi();
+		return view('admin.products.add')->with([
+				'msg' => $this->msg,
+				'title' => $title,
+				'parent' => $parent,
+				'cate' => $cate
+		]);
+	}
+
+	public function productsAdd_sm()
+	{
+		$v = Product::validate(Input::all());
+		if ( $v->passes() ) {
+			//Alias name vi 
+			$alias = mb_strtolower(Registrar::removesign(Input::get('name')));
+			//Alias name en 
+			$alias_en = mb_strtolower(Registrar::removesign(Input::get('title_en')));
+			//Alias name ja 
+			$alias_ja = mb_strtolower(Registrar::removesign(Input::get('title_ja')));
+
+			//Array Article
+			$dataVi = ([
+				'alias' => $alias,
+				'name' => Input::get('name'),
+				'img' => '',//Input::file('image'),
+				'list_img' => null, //-------------- dùng Jquery get sau
+				'desc' => Input::get('desc'),
+				'note' => Input::get('note'),
+				'category_id' => Input::get('category_id'),
+				'created_at' => Carbon::now(),
+				'cutomer' => Input::get('cutomer')
+				]);
+			//Array Lang
+			$dataLang = ([[
+				'item_id' => '',
+				'alias' => $alias_en, 
+				'table_name' => 'products',
+				'lang' => 'en', 
+				'name' => Input::get('title_en'),
+				'img' => '', //-------------------------------------> get sau khi đã tạo form
+				'desc' => Input::get('desc_en'),
+				'fulltext' => Input::get('fulltext_en')
+				],
+				[
+				'item_id' => '',
+				'alias' => $alias_ja, 
+				'table_name' => 'products',
+				'lang' => 'ja', 
+				'name' => Input::get('title_ja'),
+				'img' => '', //-------------------------------------> get sau khi đã tạo form
+				'desc' => Input::get('desc_ja'),
+				'fulltext' => Input::get('fulltext_ja')
+				]
+				]);
+			$products = new Product();
+			$res = $products->Insert($dataVi, $dataLang);
+			if(!$res){
+				$msg = array(
+					'type_msg' =>'danger',
+					'msg' =>'Lỗi! Đã có lỗi trong quá trình thêm - ref:'.$res
+					);
+			}
+			else{
+				$msg = array(
+					'type_msg' =>'success',
+					'msg' =>'Thành công! Dữ liệu đã được lưu trữ'
+					);
+			}
+			session($msg);
+
+			// return Redirect::back();
+			if(isset($_POST['continue']))
+				return redirect()->action('AdminController@productsAdd');
+			else return redirect()->action('AdminController@products');
+		}
+		 else {
+		 	Input::flash();
+            return redirect()->action('AdminController@productsAdd')->withErrors( $v->getMessageBag());
+        }
+	}
+
+	/**
+	 * Edit an products [Edit].
+	 *
+	 * @return Response
+	 */
+	public function productsEdit($id)
+	{
+		$title = 'Product [Edit]';
+		$parent = 'Product';
+
+		$obj = Product::read($id);
+		$obj_en = Language::read($id,'products','en');
+		$obj_ja = Language::read($id,'products','ja');
+		//Get List categories
+		$cate = Category::getLstCategoriesVi();
+
+		return view('admin.products.edit')->with([
+				'msg' => $this->msg,
+				'title' => $title,
+				'parent' => $parent,
+				'cate' => $cate,
+				'obj' => $obj,
+				'obj_en' => $obj_en,
+				'obj_ja' => $obj_ja
+		]);
+	}
+
+	public function productsEdit_sm()
+	{
+		$id = Input::get('id');
+		$v = Product::validate(Input::all());
+		if ( $v->passes() ) {
+			//Alias name vi 
+			$alias = mb_strtolower(Registrar::removesign(Input::get('name')));
+			//Alias name en 
+			$alias_en = mb_strtolower(Registrar::removesign(Input::get('title_en')));
+			//Alias name ja 
+			$alias_ja = mb_strtolower(Registrar::removesign(Input::get('title_ja')));
+
+			//Array Article
+			$dataVi = ([
+				'alias' => $alias,
+				'name' => Input::get('name'),
+				'img' => '',//Input::file('image'),
+				'list_img' => null, //-------------- dùng Jquery get sau
+				'desc' => Input::get('desc'),
+				'note' => Input::get('note'),
+				'category_id' => Input::get('category_id'),
+				'updated_at' => Carbon::now(),
+				'cutomer' => Input::get('cutomer')
+				]);
+			//Array Lang
+			$dataLang = ([[
+				'item_id' => $id,
+				'alias' => $alias_en, 
+				'table_name' => 'products',
+				'lang' => 'en', 
+				'name' => Input::get('title_en'),
+				'img' => '', //-------------------------------------> get sau khi đã tạo form
+				'desc' => Input::get('desc_en'),
+				'fulltext' => Input::get('fulltext_en')
+				],
+				[
+				'item_id' => $id,
+				'alias' => $alias_ja, 
+				'table_name' => 'products',
+				'lang' => 'ja', 
+				'name' => Input::get('title_ja'),
+				'img' => '', //-------------------------------------> get sau khi đã tạo form
+				'desc' => Input::get('desc_ja'),
+				'fulltext' => Input::get('fulltext_ja')
+				]
+				]);
+
+			$products = new Product();
+			$res = $products->_Update($dataVi, $dataLang, $id);
+			if(!$res){
+				$msg = array(
+					'type_msg' =>'danger',
+					'msg' =>'Lỗi! Đã có lỗi trong quá trình cập nhật - ref:'.$res
+					);
+			}
+			else{
+				$msg = array(
+					'type_msg' =>'success',
+					'msg' =>'Thành công! Dữ liệu đã được lưu trữ'
+					);
+			}
+			session($msg);
+
+			// return Redirect::back();
+			return redirect()->action('AdminController@products');
+		}
+		 else {
+			return redirect()->action('AdminController@productsEdit', [$id])
+			->withErrors( $v->getMessageBag());;
+        }
+	}
+
+	/**
+	 * Delete products [Delete].
+	 *
+	 * @return Response
+	 */
+	public function productsDel($id)
+	{
+		$res = Product::Del($id);
+		if(!$res){
+			$msg = array(
+				'type_msg' =>'danger',
+				'msg' =>'Lỗi! Đã có lỗi trong quá trình xóa'
+				);
+		}
+		else{
+			$msg = array(
+				'type_msg' =>'success',
+				'msg' =>'Thành công! Dữ liệu đã được xóa'
+				);
+		}
+		session($msg);
+		return Redirect::back();
+		//return Redirect::to('admin/products/');
+	}
+
+	public function productsMutiDel()
+	{
+		$arr_id = Input::get('item');
+		//tao string hung name bai viet khong the xoa
+		$str = '';
+		if (is_array($arr_id))
+		{
+			foreach ($arr_id as $id) {
+				# check relasionship here
+					# code sau...
+				# Read products
+				$obj = Product::read($id);
+				# Del database
+				$res = Product::Del($id);
+				#Kiem tra sau khi xoa
+				if (!$res) {
+					$str .= $obj['name'] . ', ';
+					continue;
+				}	
+			}
+		}
+		if(!$str == ''){
+			$msg = array(
+				'type_msg' =>'danger',
+				'msg' => $str.' không xóa được'
+				);
+		}
+		else{
+			$msg = array(
+				'type_msg' =>'success',
+				'msg' =>'Thành công! Dữ liệu đã được xóa'
+				);
+		}
+		session($msg);
+		return Redirect::back();
+	}
+
+	/*--------------------------------- [PUBLIC]---------------------------------*/
 	public function printLstMenuVi($lstMenu, $parent_id, $char){
 		foreach ($lstMenu as $v) {
 			if($v->parent_id == $parent_id){

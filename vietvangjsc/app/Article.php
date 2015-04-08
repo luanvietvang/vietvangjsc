@@ -212,9 +212,17 @@ class Article extends MyModel{
 	 */
 	public static function getSearch($keyword){
 		
-		$result = Article::where('title', 'LIKE', '%'.$keyword.'%')
+		$result = Article::leftJoin('categories', function($join) {
+					  $join->on('articles.category_id', '=', 'categories.id');
+				   })
+				->leftJoin('menus', function($join) {
+					  $join->on('articles.menu_id', '=', 'menus.id');
+				   })
+		 		->where('title', 'LIKE', '%'.$keyword.'%')
 				->orwhere('desc', 'LIKE', '%'.$keyword.'%')
 				->orwhere('fulltext', 'LIKE', '%'.$keyword.'%')
+				->select('articles.id as id', 'articles.title as title', 'articles.img as img', 'articles.desc as desc', 'articles.fulltext as fulltext', 
+					'articles.created_at as created_at', 'articles.updated_at as updated_at', 'menus.name as menu_id', 'categories.name as category_id')
 				->paginate(3);
 		return $result;
 	}
