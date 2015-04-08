@@ -29,7 +29,7 @@
                 <!-- <div class="row"> -->
                 {!! Form::open(array('url' => 'admin/articles/search')) !!}
                     <div class="form-group input-group">
-                        <input type="text" class="form-control" name="keyword" id="keyword" value="{!! $kw !!}">
+                        <input type="text" class="form-control" name="keyword" id="keyword">
                         <span class="input-group-btn"><button class="btn btn-default" type="Submit"><i class="fa fa-search"></i></button></span>
                     </div>
                 {!! Form::close() !!}
