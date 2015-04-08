@@ -68,20 +68,34 @@ class AdminController extends Controller {
 	public function articles()
 	{
 		//get all
-		$keyword = Input::get('keyword');
-		if($keyword == ""){
-			$title = 'Article';
-			$kw = '';
-			$arts = Article::getAll();
-		}
-		else {
-			$title = 'Search Article';
-			$kw = $keyword;
-			$arts = Article::getSearch($keyword);
-		}
+		$title = 'Article';
+		$kw = '';
+		$arts = Article::getAll();
+		
 		return view('admin.articles.index')->with([
 				'msg' => $this->msg,
 				'title' => $title,
+				'arts' 	=> $arts,
+				'kw' 	=> $kw
+			]);
+	}
+
+	/**
+	 * Show the form articles [index].
+	 *
+	 * @return Response
+	 */
+	public function articlesSearch()
+	{
+		$title = 'Article [Search]';
+		$parent = 'Article';
+		$kw = Input::get('keyword');
+		
+		$arts = Article::getSearch($kw);
+		return view('admin.articles.search')->with([
+				'msg' => $this->msg,
+				'title' => $title,
+				'parent' => $parent,
 				'arts' 	=> $arts,
 				'kw' 	=> $kw
 			]);
@@ -117,13 +131,14 @@ class AdminController extends Controller {
 	public function articlesAdd()
 	{
 		$title = 'Article [Add]';
-
+		$parent = 'Article';
 		//Get List categories
 		$cate = Category::getLstCategoriesVi();
 		$menu = $this->printLstMenuVi(Menu::getMenuVi(),0, '-');
 		return view('admin.articles.add')->with([
 				'msg' => $this->msg,
 				'title' => $title,
+				'parent' => $parent,
 				'cate' => $cate,
 				'menu' => $menu
 		]);
@@ -131,12 +146,12 @@ class AdminController extends Controller {
 
 	public function articlesAdd_sm()
 	{
-		//Set title
-		$title = 'Article [Add]';
+		// //Set title
+		// $title = 'Article [Add]';
 
-		//Get List categorie
-		$cate = Category::getLstCategoriesVi();
-		$menu = $this->printLstMenuVi(Menu::getMenuVi(),0, '-');
+		// //Get List categorie
+		// $cate = Category::getLstCategoriesVi();
+		// $menu = $this->printLstMenuVi(Menu::getMenuVi(),0, '-');
 		//$_input = Input::all();
 		// if (!Input::get('ckimg').checked) {
 		// 	# code...
@@ -235,6 +250,7 @@ class AdminController extends Controller {
 	public function articlesEdit($id)
 	{
 		$title = 'Article [Edit]';
+		$parent = 'Article';
 
 		$obj = Article::read($id);
 		$obj_en = Language::read($id,'articles','en');
@@ -248,6 +264,7 @@ class AdminController extends Controller {
 		return view('admin.articles.edit')->with([
 				'msg' => $this->msg,
 				'title' => $title,
+				'parent' => $parent,
 				'cate' => $cate,
 				'menu' => $menu,
 				'obj' => $obj,

@@ -58,6 +58,7 @@ Route::controllers([
 Route::get('/admin', 'AdminController@index');
 Route::get('admin/index', 'AdminController@index');
 Route::any('admin/articles', 'AdminController@articles');
+Route::any('admin/articles/search', 'AdminController@articlesSearch');
 Route::get('admin/articles/add', 'AdminController@articlesAdd');
 Route::post('admin/articles/add', 'AdminController@articlesAdd_sm');
 Route::get('admin/articles/edit/{id?}', 'AdminController@articlesEdit')->where(array('id' => '[0-9]+'));

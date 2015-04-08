@@ -15,7 +15,7 @@
                         <i class="fa fa-dashboard"></i>  <a href="{{ URL::to('admin') }}">Dashboard</a>
                     </li>
                     <li class="active">
-                        <i class="fa fa-edit"></i> {!! $title !!}
+                        <i class="fa fa-table"></i> <a href="{{ URL::to('admin/articles') }}">{!! $parent !!}</a>
                     </li>
                 </ol>
             </div>

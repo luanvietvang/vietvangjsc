@@ -16,28 +16,23 @@
                             <li>
                                 <i class="fa fa-dashboard"></i>  <a href="{{ URL::to('admin') }}">Dashboard</a>
                             </li>
+                            <li class="active">
+                                <i class="fa fa-table"></i> <a href="{{ URL::to('admin/articles') }}">{!! $parent !!}</a>
+                            </li>
                         </ol>
                     </div>
                 </div>
                 <!-- Show message -->
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-12">
                         {!! $msg !!}
                     </div>
                 </div>
-                
-                <!-- <div class="row"> -->
-                {!! Form::open(array('url' => 'admin/articles/search')) !!}
-                    <div class="form-group input-group">
-                        <input type="text" class="form-control" name="keyword" id="keyword" value="{!! $kw !!}">
-                        <span class="input-group-btn"><button class="btn btn-default" type="Submit"><i class="fa fa-search"></i></button></span>
-                    </div>
-                {!! Form::close() !!}
-                <!-- </div> -->
                 <div class="row">
                     <div class="col-lg-12">
-<!--                         <h2>{!! $title !!}</h2>
- -->                        <div class="table-responsive">
+                        @if(count($arts) > 0)
+                        <h2>Tìm thấy {!!count($arts)!!} bài viết !</h2>
+                        <div class="table-responsive">
                             {!! Form::open(array('action' => 'AdminController@articlesMutiDel')) !!}
                             <table class="table table-bordered table-hover table-striped">
                                 <thead>
@@ -87,9 +82,10 @@
                             </table>
                             {!! Form::close() !!} 
                         </div>
+                        @else
+                        <h2>Không tìm thấy bài viết nào với từ khóa [{!! $kw !!}] !</h2>
+                        @endif
                     </div>
-                    
-
                 </div>
                 <!-- /.row -->
 
