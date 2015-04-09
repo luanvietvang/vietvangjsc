@@ -196,8 +196,19 @@ class Product extends MyModel{
 			$this->fields_Lang = DB::connection()->getSchemaBuilder()->getColumnListing($this->table_Lang);
 
 			DB::beginTransaction();
-			//Upload img. Cho nay upload nhiu img, de lam sau
+			
+			//Upload mutiple img
+			$list_img = Input::file('list_img');
+			$listFilename = null;
+			if($list_img != null){
+				foreach ($list_img as $v) {
+					$listFilename .= $this->uploadImg($v, $this->_url, 100, 80).',';
+				}
+			}
+			//Upload img
 			$filename = $this->uploadImg(Input::file('image'), $this->_url, 100, 80);
+			// echo $filename; die();
+
 			$filename_en = null;
 			$filename_ja = null;
 			if(!Input::get('ckimg')){
@@ -211,9 +222,11 @@ class Product extends MyModel{
 			$arr = array();
 			foreach ($this->fields as $v) {
 				if(isset($dataVi[$v])){
-					$arr[$v] = $dataVi[$v];
-					if($v == 'img')
+					if($v == 'img'){
 						$arr[$v] = $filename;
+					}
+					elseif($v == 'list_img' && $listFilename != null)
+						$arr[$v] = rtrim($listFilename,',');
 					else $arr[$v] = $dataVi[$v];
 				}
 			}
@@ -270,19 +283,33 @@ class Product extends MyModel{
 			$this->fields_Lang = DB::connection()->getSchemaBuilder()->getColumnListing($this->table_Lang);
 
 			DB::beginTransaction();
+			$obj = $this->read($id);
 			//image products
-			$filename = $this->read($id)->img;
+			$filename = $obj->img;
 			if($_FILES['image']['name'] != ''){
 				//del old image
 				if (File::exists($this->_url.'/'.$filename))
 					unlink($this->_url.'/'.$filename);
 				//Upload img
 				$filename = $this->uploadImg(Input::file('image'), $this->_url, 100, 80);
-
 			}
 
 			//get list img để sau
-			# code...
+			$listFilename = $obj->list_img;
+			if($_FILES['list_img']['name'] != ''){
+				//del old image
+				$arr_img = explode(',', $listFilename);
+				foreach ($arr_img as $img) {
+					if (File::exists($this->_url.'/'.$img))
+					unlink($this->_url.'/'.$img);
+				}
+				
+				//Upload img
+				$listFilename = '';
+				foreach (Input::file('list_img') as $v) {
+					$listFilename .= $this->uploadImg($v, $this->_url, 100, 80).',';
+				}
+			}
 
 			//image en
 			$filename_en = Language::read($id,'products','en')->img;
@@ -312,9 +339,11 @@ class Product extends MyModel{
 			$arr = array();
 			foreach ($this->fields as $v) {
 				if(isset($dataVi[$v])){
-					$arr[$v] = $dataVi[$v];
-					if($v == 'img')
+					if($v == 'img'){
 						$arr[$v] = $filename;
+					}
+					elseif($v == 'list_img' && $listFilename != null)
+						$arr[$v] = rtrim($listFilename,',');
 					else $arr[$v] = $dataVi[$v];
 				}
 			}

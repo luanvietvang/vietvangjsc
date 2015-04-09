@@ -269,7 +269,6 @@ class Article extends MyModel{
 			$arr = array();
 			foreach ($this->fields as $v) {
 				if(isset($dataVi[$v])){
-					$arr[$v] = $dataVi[$v];
 					if($v == 'img')
 						$arr[$v] = $filename;
 					else $arr[$v] = $dataVi[$v];
@@ -379,7 +378,6 @@ class Article extends MyModel{
 			$arr = array();
 			foreach ($this->fields as $v) {
 				if(isset($dataVi[$v])){
-					$arr[$v] = $dataVi[$v];
 					if($v == 'img')
 						$arr[$v] = $filename;
 					else $arr[$v] = $dataVi[$v];

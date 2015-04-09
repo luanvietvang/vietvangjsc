@@ -508,7 +508,7 @@ class AdminController extends Controller {
 				'alias' => $alias,
 				'name' => Input::get('name'),
 				'img' => '',//Input::file('image'),
-				'list_img' => null, //-------------- dùng Jquery get sau
+				'list_img' => '', //-------------- dùng Jquery get sau
 				'desc' => Input::get('desc'),
 				'note' => Input::get('note'),
 				'category_id' => Input::get('category_id'),
@@ -608,7 +608,7 @@ class AdminController extends Controller {
 				'alias' => $alias,
 				'name' => Input::get('name'),
 				'img' => '',//Input::file('image'),
-				'list_img' => null, //-------------- dùng Jquery get sau
+				'list_img' => '', //-------------- dùng Jquery get sau
 				'desc' => Input::get('desc'),
 				'note' => Input::get('note'),
 				'category_id' => Input::get('category_id'),
@@ -748,4 +748,5 @@ class AdminController extends Controller {
 		}
 		return $this->resmenu;
 	}
+
 }

@@ -4,8 +4,31 @@
 /*----------------------------
     The file upload form
 -----------------------------*/
+.abcd{
+    text-align: left;
+}
 
+.abcd img{
+    height:100px;
+    width:100px;
+    padding: 5px;
+    border: 1px solid rgb(232, 222, 189);
+}
 
+#file {
+  color: green;
+  padding: 5px;
+  border: 1px dashed #123456;
+  background-color: #f9ffe5;
+}
+
+#img{ 
+    width: 24px;
+    border: none; 
+    height:24px;
+    margin-left: -20px;
+    margin-bottom: 91px;
+}
 
 #drop{
     background-color: #2E3134;
@@ -44,7 +67,7 @@
 
 #upload ul{
     list-style:none;
-    margin:0 -30px;
+    margin:10px -30px;
     border-top:1px solid #2b2e31;
     border-bottom:1px solid #3d4043;
 }
@@ -70,14 +93,14 @@
 }
 
 #upload ul li p{
-    width: 144px;
+    width: 170px;
     overflow: hidden;
     white-space: nowrap;
     color: #EEE;
-    font-size: 16px;
+    font-size: 12px;
     font-weight: bold;
     position: absolute;
-    top: 20px;
+    top: 11px;
     left: 100px;
 }
 
@@ -89,7 +112,7 @@
 }
 
 #upload ul li canvas{
-    top: 15px;
+    top: 11px;
     left: 32px;
     position: absolute;
 }
@@ -99,7 +122,7 @@
     height: 12px;
     background: url('../img/icons.png') no-repeat;
     position: absolute;
-    top: 34px;
+    top: 17px;
     right: 33px;
     cursor:pointer;
 }

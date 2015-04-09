@@ -1,96 +1,46 @@
-$(function(){
+var abc = 0; //Declaring and defining global increement variable
 
-    var ul = $('#upload ul');
+$(document).ready(function() {
 
-    $('#drop a').click(function(){
-              alert ("aaaa");
-        // Simulate a click on the file input button
-        // to show the file browser dialog
-        $(this).parent().find('input').click();
+//To add new input file field dynamically, on click of "Add More Files" button below function will be executed
+    $('#add_more').click(function() {
+        $(this).before($("<div/>", {id: 'filediv'}).fadeIn('slow').append(
+                $("<input/>", {name: 'list_img[]', type: 'file', id: 'file'}),       
+                $("<br/>")
+                ));
     });
 
-    // Initialize the jQuery File Upload plugin
-    $('#upload').fileupload({
-
-        // This element will accept file drag/drop uploading
-        dropZone: $('#drop'),
-
-        // This function is called when a file is added to the queue;
-        // either via the browse button, or via drag/drop:
-        add: function (e, data) {
-
-            var tpl = $('<li class="working"><input type="text" value="0" data-width="48" data-height="48"'+
-                ' data-fgColor="#0788a5" data-readOnly="1" data-bgColor="#3e4043" /><p></p><span></span></li>');
-
-            // Append the file name and file size
-            tpl.find('p').text(data.files[0].name)
-                         .append('<i>' + formatFileSize(data.files[0].size) + '</i>');
-
-            // Add the HTML to the UL element
-            data.context = tpl.appendTo(ul);
-
-            // Initialize the knob plugin
-            tpl.find('input').knob();
-
-            // Listen for clicks on the cancel icon
-            tpl.find('span').click(function(){
-
-                if(tpl.hasClass('working')){
-                    jqXHR.abort();
-                }
-
-                tpl.fadeOut(function(){
-                    tpl.remove();
-                });
-
-            });
-
-            // Automatically upload the file once it is added to the queue
-            var jqXHR = data.submit();
-        },
-
-        progress: function(e, data){
-
-            // Calculate the completion percentage of the upload
-            var progress = parseInt(data.loaded / data.total * 100, 10);
-
-            // Update the hidden input field and trigger a change
-            // so that the jQuery knob plugin knows to update the dial
-            data.context.find('input').val(progress).change();
-
-            if(progress == 100){
-                data.context.removeClass('working');
+//following function will executes on change event of file input to select different file   
+$('body').on('change', '#file', function(){
+            if (this.files && this.files[0]) {
+                 abc += 1; //increementing global variable by 1
+                
+                var z = abc - 1;
+                var x = $(this).parent().find('#previewimg' + z).remove();
+                $(this).before("<div id='abcd"+ abc +"' class='abcd'><img id='previewimg" + abc + "' src=''/></div>");
+               
+                var reader = new FileReader();
+                reader.onload = imageIsLoaded;
+                reader.readAsDataURL(this.files[0]);
+               
+                $(this).hide();
+                $("#abcd"+ abc).append($("<img/>", {id: 'img', src: '../img/x.png', alt: 'delete'}).click(function() {
+                $(this).parent().parent().remove();
+                }));
             }
-        },
+        });
 
-        fail:function(e, data){
-            // Something has gone wrong!
-            data.context.addClass('error');
+//To preview image     
+    function imageIsLoaded(e) {
+        $('#previewimg' + abc).attr('src', e.target.result);
+    };
+
+    $('#upload').click(function(e) {
+        var name = $(":file").val();
+        if (!name)
+        {
+            alert("First Image Must Be Selected");
+            e.preventDefault();
         }
-
     });
-
-
-    // Prevent the default action when a file is dropped on the window
-    $(document).on('drop dragover', function (e) {
-        e.preventDefault();
-    });
-
-    // Helper function that formats the file sizes
-    function formatFileSize(bytes) {
-        if (typeof bytes !== 'number') {
-            return '';
-        }
-
-        if (bytes >= 1000000000) {
-            return (bytes / 1000000000).toFixed(2) + ' GB';
-        }
-
-        if (bytes >= 1000000) {
-            return (bytes / 1000000).toFixed(2) + ' MB';
-        }
-
-        return (bytes / 1000).toFixed(2) + ' KB';
-    }
-
 });

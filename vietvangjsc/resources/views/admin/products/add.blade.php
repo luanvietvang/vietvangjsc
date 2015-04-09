@@ -38,7 +38,7 @@
             </div>
         </div>
         <!-- /.row -->
-        {!! Form::open(array('action' => 'AdminController@productsAdd_sm','files' => true,'id' => 'upload')) !!}
+        {!! Form::open(array('action' => 'AdminController@productsAdd_sm','files' => true)) !!}
         <div class="row">
             <div class="col-lg-6">
 
@@ -50,6 +50,11 @@
                             <option value="{!! $ct->id !!}">{!! $ct->name !!}</option>
                         @endforeach
                     </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Customer</label>
+                    <input class="form-control" placeholder="Enter text" name="cutomer" value="{!! Input::old('cutomer') !!}">
                 </div>
 
                  <div class="form-group">
@@ -64,14 +69,13 @@
                     <small>(*.gif , *.jpg ,*.png < 2000kb)</small><br>
                 </div>
 
-                <div id="drop">
-                        Drop Here
+                <div class="form-group">
+                    <label>List Image</label>
+                    <div id="filediv">
 
-                        <a>Browse</a>
-                        <input type="file" name="upl" multiple />
-                    <ul>
-                        <!-- The file uploads will be shown here -->
-                    </ul>
+                            <input type="file" name="list_img[]" id="file" multiple />
+                    </div>
+                    <input type="button" id="add_more" class="upload" value="Add More Files"/>
                 </div>
 
                 <div class="form-group">
@@ -87,11 +91,6 @@
                 <div class="form-group">
                     <label>Full Text</label>
                     <textarea class="ckeditor form-control" rows="3" name="desc">{!! Input::old('desc') !!}</textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Customer</label>
-                    <input class="form-control" placeholder="Enter text" name="cutomer" value="{!! Input::old('cutomer') !!}">
                 </div>
                
             </div>

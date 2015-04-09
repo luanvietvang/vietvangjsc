@@ -56,6 +56,11 @@
                     </select>
                 </div>
                 
+                <div class="form-group">
+                    <label>Customer</label>
+                    <input class="form-control" placeholder="Enter text" name="cutomer" value="{!! $obj->cutomer !!}">
+                </div>
+
                  <div class="form-group">
                     <label>Image</label>
                     <div class="checkbox">
@@ -75,6 +80,22 @@
                 </div>
 
                 <div class="form-group">
+                    <label>List Image</label><br>
+                     @if($obj->list_img != '')
+                        @foreach((explode(',', $obj->list_img)) as $img)
+                            {!! Html::image('/upload/products/'.$img, 'img', array( 'width' => 100, 'height' => 100 )) !!}
+                        @endforeach
+                    @else
+                        {!! Html::image('/upload/noimage.gif', 'img', array( 'width' => 100, 'height' => 100 )) !!}
+                    @endif
+
+                    <div id="filediv" style="margin-top:10px;">
+                        <input type="file" name="list_img[]" id="file" multiple />
+                    </div>
+                    <input type="button" id="add_more" class="upload" value="Add More Files"/>
+                </div>
+
+                <div class="form-group">
                     <label>Title</label>
                     <input class="form-control" placeholder="Enter text" name="name" value="{!! $obj->name !!}">
                 </div>
@@ -87,11 +108,6 @@
                 <div class="form-group">
                     <label>Full Text</label>
                     <textarea class="ckeditor form-control" rows="3" name="desc">{!! $obj->desc !!}</textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Customer</label>
-                    <input class="form-control" placeholder="Enter text" name="cutomer" value="{!! $obj->cutomer !!}">
                 </div>
 
             </div>
