@@ -725,6 +725,257 @@ class AdminController extends Controller {
 		return Redirect::back();
 	}
 
+	/*--------------------------------- [CATEGORIES]---------------------------------*/
+	/**
+	 * Show the form Product [index].
+	 *
+	 * @return Response
+	 */
+	public function categories()
+	{
+		//get all
+		$title = 'Category';
+		$obj = Category::getAll();
+		
+		return view('admin.categories.index')->with([
+				'msg' => $this->msg,
+				'title' => $title,
+				'obj' 	=> $obj
+			]);
+	}
+
+	/**
+	 * Add new products [add].
+	 *
+	 * @return Response
+	 */
+	public function categoriesAdd()
+	{
+		$title = 'Category [Add]';
+		$parent = 'Category';
+		//Get List categories
+		return view('admin.categories.add')->with([
+				'msg' => $this->msg,
+				'title' => $title,
+				'parent' => $parent
+		]);
+	}
+
+	public function categoriesAdd_sm()
+	{
+		$v = Category::validate(Input::all());
+		if ( $v->passes() ) {
+			//Alias name vi 
+			$alias = mb_strtolower(Registrar::removesign(Input::get('name')));
+			//Alias name en 
+			$alias_en = mb_strtolower(Registrar::removesign(Input::get('title_en')));
+			//Alias name ja 
+			$alias_ja = mb_strtolower(Registrar::removesign(Input::get('title_ja')));
+
+			//Array Category
+			$dataVi = ([
+				'alias' => $alias,
+				'name' => Input::get('title'),
+				'desc' => Input::get('desc'),
+				'logo' => ''
+				]);
+			//Array Lang
+			$dataLang = ([[
+				'item_id' => '',
+				'alias' => $alias_en, 
+				'table_name' => 'categories',
+				'lang' => 'en', 
+				'name' => Input::get('title_en'),
+				'img' => '', //-------------------------------------> get sau khi đã tạo form
+				'desc' => Input::get('desc_en')
+				],
+				[
+				'item_id' => '',
+				'alias' => $alias_ja, 
+				'table_name' => 'categories',
+				'lang' => 'ja', 
+				'name' => Input::get('title_ja'),
+				'img' => '', //-------------------------------------> get sau khi đã tạo form
+				'desc' => Input::get('desc_ja')
+				]
+				]);
+			$categories = new Category();
+			$res = $categories->Insert($dataVi, $dataLang);
+			if(!$res){
+				$msg = array(
+					'type_msg' =>'danger',
+					'msg' =>'Lỗi! Đã có lỗi trong quá trình thêm - ref:'.$res
+					);
+			}
+			else{
+				$msg = array(
+					'type_msg' =>'success',
+					'msg' =>'Thành công! Dữ liệu đã được lưu trữ'
+					);
+			}
+			session($msg);
+
+			// return Redirect::back();
+			if(isset($_POST['continue']))
+				return redirect()->action('AdminController@categoriesAdd');
+			else return redirect()->action('AdminController@categories');
+		}
+		 else {
+		 	Input::flash();
+            return redirect()->action('AdminController@categoriesAdd')->withErrors( $v->getMessageBag());
+        }
+	}
+
+	/**
+	 * Edit an products [Edit].
+	 *
+	 * @return Response
+	 */
+	public function categoriesEdit($id)
+	{
+		$title = 'Category [Edit]';
+		$parent = 'Category';
+
+		$obj = Category::read($id);
+		$obj_en = Language::read($id,'categories','en');
+		$obj_ja = Language::read($id,'categories','ja');
+
+		return view('admin.categories.edit')->with([
+				'msg' => $this->msg,
+				'title' => $title,
+				'parent' => $parent,
+				'obj' => $obj,
+				'obj_en' => $obj_en,
+				'obj_ja' => $obj_ja
+		]);
+	}
+
+	public function categoriesEdit_sm()
+	{
+		$id = Input::get('id');
+		$v = Category::validate(Input::all());
+		if ( $v->passes() ) {
+			//Alias name vi 
+			$alias = mb_strtolower(Registrar::removesign(Input::get('name')));
+			//Alias name en 
+			$alias_en = mb_strtolower(Registrar::removesign(Input::get('title_en')));
+			//Alias name ja 
+			$alias_ja = mb_strtolower(Registrar::removesign(Input::get('title_ja')));
+
+			//Array Category
+			$dataVi = ([
+				'alias' => $alias,
+				'name' => Input::get('title'),
+				'desc' => Input::get('desc'),
+				'logo' => ''
+				]);
+			//Array Lang
+			$dataLang = ([[
+				'item_id' => $id,
+				'alias' => $alias_en, 
+				'table_name' => 'categories',
+				'lang' => 'en', 
+				'name' => Input::get('title_en'),
+				'img' => '', //-------------------------------------> get sau khi đã tạo form
+				'desc' => Input::get('desc_en')
+				],
+				[
+				'item_id' => $id,
+				'alias' => $alias_ja, 
+				'table_name' => 'categories',
+				'lang' => 'ja', 
+				'name' => Input::get('title_ja'),
+				'img' => '', //-------------------------------------> get sau khi đã tạo form
+				'desc' => Input::get('desc_ja')
+				]
+				]);
+			$categories = new Category();
+			$res = $categories->_Update($dataVi, $dataLang, $id);
+			if(!$res){
+				$msg = array(
+					'type_msg' =>'danger',
+					'msg' =>'Lỗi! Đã có lỗi trong quá trình cập nhật - ref:'.$res
+					);
+			}
+			else{
+				$msg = array(
+					'type_msg' =>'success',
+					'msg' =>'Thành công! Dữ liệu đã được lưu trữ'
+					);
+			}
+			session($msg);
+
+			// return Redirect::back();
+			return redirect()->action('AdminController@categories');
+		}
+		 else {
+			return redirect()->action('AdminController@categoriesEdit', [$id])
+			->withErrors( $v->getMessageBag());;
+        }
+	}
+
+	/**
+	 * Delete products [Delete].
+	 *
+	 * @return Response
+	 */
+	public function categoriesDel($id)
+	{
+		$res = Category::Del($id);
+		if(!$res){
+			$msg = array(
+				'type_msg' =>'danger',
+				'msg' =>'Lỗi! Đã có lỗi trong quá trình xóa'
+				);
+		}
+		else{
+			$msg = array(
+				'type_msg' =>'success',
+				'msg' =>'Thành công! Dữ liệu đã được xóa'
+				);
+		}
+		session($msg);
+		return Redirect::back();
+		//return Redirect::to('admin/products/');
+	}
+
+	public function categoriesMutiDel()
+	{
+		$arr_id = Input::get('item');
+		//tao string hung name bai viet khong the xoa
+		$str = '';
+		if (is_array($arr_id))
+		{
+			foreach ($arr_id as $id) {
+				# check relasionship here
+					# code sau...
+				# Read products
+				$obj = Category::read($id);
+				# Del database
+				$res = Category::Del($id);
+				#Kiem tra sau khi xoa
+				if (!$res) {
+					$str .= $obj['name'] . ', ';
+					continue;
+				}	
+			}
+		}
+		if(!$str == ''){
+			$msg = array(
+				'type_msg' =>'danger',
+				'msg' => $str.' không xóa được'
+				);
+		}
+		else{
+			$msg = array(
+				'type_msg' =>'success',
+				'msg' =>'Thành công! Dữ liệu đã được xóa'
+				);
+		}
+		session($msg);
+		return Redirect::back();
+	}
+
 	/*--------------------------------- [PUBLIC]---------------------------------*/
 	public function printLstMenuVi($lstMenu, $parent_id, $char){
 		foreach ($lstMenu as $v) {

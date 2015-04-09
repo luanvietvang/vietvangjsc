@@ -78,5 +78,13 @@ Route::any('admin/products/del/{id?}', 'AdminController@productsDel')->where(arr
 Route::any('admin/products/MutiDel', 'AdminController@productsMutiDel');
 Route::get('admin/products/detail/{id?}', 'AdminController@productsDetail')->where(array('id' => '[0-9]+'));
 
+/*---------Categories-----------*/
+Route::any('admin/categories', 'AdminController@categories');
+Route::get('admin/categories/add', 'AdminController@categoriesAdd');
+Route::post('admin/categories/add', 'AdminController@categoriesAdd_sm');
+Route::get('admin/categories/edit/{id?}', 'AdminController@categoriesEdit')->where(array('id' => '[0-9]+'));
+Route::post('admin/categories/edit', 'AdminController@categoriesEdit_sm');
+Route::any('admin/categories/del/{id?}', 'AdminController@categoriesDel')->where(array('id' => '[0-9]+'));
+Route::any('admin/categories/MutiDel', 'AdminController@categoriesMutiDel');
+
 Route::get('admin/menus', 'AdminController@menus');
-Route::get('admin/products', 'AdminController@products');

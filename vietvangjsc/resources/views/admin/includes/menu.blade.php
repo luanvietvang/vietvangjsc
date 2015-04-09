@@ -4,7 +4,7 @@
         <a href="{{ URL::to('admin') }}"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
     </li>
     <li>
-        <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> Categories</a>
+        <a href="{{ URL::to('admin/categories') }}"><i class="fa fa-fw fa-bar-chart-o"></i> Categories</a>
     </li>
     <li>
         <a href="javascript:;" data-toggle="collapse" data-target="#articles"><i class="fa fa-fw fa-arrows-v"></i> Articles <i class="fa fa-fw fa-caret-down"></i></a>
