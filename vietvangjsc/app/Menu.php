@@ -1,13 +1,17 @@
 <?php namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-class Menu extends Model{
+class Menu extends MyModel{
 	/**
 	 * The database table used by the model.
 	 *
 	 * @var string
 	 */
 	protected $table = 'menus';
+	protected $fields = array();
+
+	protected $table_Lang = 'languages';
+	protected $fields_Lang = array();
 
 	public $timestamps = false;
 
@@ -18,9 +22,14 @@ class Menu extends Model{
 	 */
 	protected $fillable = ['id', 'alias', 'name', 'parent_id'];
 
-	// public function __construct(){
-	// 	parent::__construct('menus');
-	// }
+	public function __construct(){
+		parent::__construct('menus');
+	}
+
+	public function article()
+    {
+        return $this->hasOne('App\Article', 'menu_id');
+    }
 
 	public static function getMenu($lang, $parent_id){
 		if ($lang == "vi") {

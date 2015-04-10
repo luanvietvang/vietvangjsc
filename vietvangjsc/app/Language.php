@@ -29,4 +29,18 @@ class Language extends MyModel{
 				->first();
 		return $res;
 	}
+
+	public static function read2($id, $table_name){
+		$res = Language::where('item_id', '=', $id)
+				->where('table_name', '=', $table_name)
+				->get();
+		return $res;
+	}
+
+	public static function Del($id, $table_name){
+		$res = Language::where('item_id', '=', $id)
+				->where('table_name', '=', $table_name)
+				->delete();
+		return $res;
+	}
 }

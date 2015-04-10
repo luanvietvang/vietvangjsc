@@ -22,7 +22,6 @@ class Category extends MyModel{
 	protected $fields_Lang = array();
 
 	protected $_url;
-
 	public $timestamps = false;
 
 	/**
@@ -35,6 +34,10 @@ class Category extends MyModel{
 	public function __construct(){
 		parent::__construct('categories');
 		$this->_url = base_path('public/upload/categories');
+	}
+
+	public function getUrl(){
+		return $this->_url;
 	}
 
 	public function article()
@@ -119,10 +122,25 @@ class Category extends MyModel{
 	 *
 	 * @return true, false
 	 */
-	public static function Del($id){
-		$result = Category::where('id', $id)->delete();
-		if($result) return true;
-		else return false;
+	public function Del($id){
+		$result = false;
+		try {
+			#Del database
+			Category::where('id', $id)->delete();
+			#Del Language
+			Language::Del($id, $this->table);
+			//commit
+			$result = true;
+			DB::commit();
+		} catch (Exception $e) {
+			$result = false;
+			DB::rollback();
+		}
+
+		return $result;
+		// $result = Category::where('id', $id)->delete();
+		// if($result) return true;
+		// else return false;
 	}
 
 	/**

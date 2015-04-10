@@ -87,4 +87,12 @@ Route::post('admin/categories/edit', 'AdminController@categoriesEdit_sm');
 Route::any('admin/categories/del/{id?}', 'AdminController@categoriesDel')->where(array('id' => '[0-9]+'));
 Route::any('admin/categories/MutiDel', 'AdminController@categoriesMutiDel');
 
-Route::get('admin/menus', 'AdminController@menus');
+/*---------Menus-----------*/
+Route::any('admin/menus', 'AdminController@menus');
+Route::get('admin/menus/add', 'AdminController@menusAdd');
+Route::post('admin/menus/add', 'AdminController@menusAdd_sm');
+Route::get('admin/menus/edit/{id?}', 'AdminController@menusEdit')->where(array('id' => '[0-9]+'));
+Route::post('admin/menus/edit', 'AdminController@menusEdit_sm');
+Route::any('admin/menus/del/{id?}', 'AdminController@menusDel')->where(array('id' => '[0-9]+'));
+Route::any('admin/menus/MutiDel', 'AdminController@menusMutiDel');
+

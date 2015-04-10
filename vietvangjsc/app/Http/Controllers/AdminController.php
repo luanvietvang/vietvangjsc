@@ -17,6 +17,7 @@ use Mail;
 use Redirect;
 use Illuminate\Support\Facades\DB;
 use Url;
+use File;
 // use App\RocketCandy\Exceptions\ValidationException;
 // use App\RocketCandy\Services\Validation\ArticlesFormValidator as ArticlesForm;
 use Carbon\Carbon;
@@ -926,9 +927,18 @@ class AdminController extends Controller {
 		$pro = Category::find($id)->product;
 		if(count($art) == 0 && count($pro) == 0)
 		{
-			#Remove Image - có làm luôn k?
+			$category = new Category();
+			$obj = $category->read($id);
+			$obj_lang = Language::read2($id, 'categories');
+			#Remove Image 
+			if($obj->logo != '' && File::exists($category->getUrl().'/'.$obj->logo))
+				unlink($category->getUrl().'/'.$obj->logo);
+			foreach ($obj_lang as $v) {
+				if($v->img != '' && File::exists($category->getUrl().'/'.$v->img))
+				unlink($category->getUrl().'/'.$v->img);
+			}
 			#Del Database
-			$res = Category::Del($id);
+			$res = $category->Del($id);
 			if(!$res){
 				$msg = array(
 					'type_msg' =>'danger',
@@ -947,7 +957,6 @@ class AdminController extends Controller {
 					);
 		session($msg);
 		return Redirect::back();
-		//return Redirect::to('admin/products/');
 	}
 
 	public function categoriesMutiDel()
@@ -962,12 +971,21 @@ class AdminController extends Controller {
 				$art = Category::find($id)->article;
 				$pro = Category::find($id)->product;
 
-				# Read products
-				$obj = Category::read($id);
 				if(count($art) == 0 && count($pro) == 0)
 				{
 					# Del database
-					$res = Category::Del($id);
+					$category = new Category();
+					$obj = $category->read($id);
+					$obj_lang = Language::read2($id, 'categories');
+					#Remove Image 
+					if($obj->logo != '' && File::exists($category->getUrl().'/'.$obj->logo))
+						unlink($category->getUrl().'/'.$obj->logo);
+					foreach ($obj_lang as $v) {
+						if($v->img != '' && File::exists($category->getUrl().'/'.$v->img))
+						unlink($category->getUrl().'/'.$v->img);
+					}
+					#Del Database
+					$res = $category->Del($id);
 				}else{
 					$str .= $obj['name'] . ', ';
 					continue;
