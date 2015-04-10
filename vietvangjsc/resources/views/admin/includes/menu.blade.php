@@ -51,7 +51,7 @@
         </ul>
     </li>
     <li>
-        <a href="#"><i class="fa fa-fw fa-table"></i> Menus</a>
+        <a href="{{ URL::to('admin/menus') }}"><i class="fa fa-fw fa-table"></i> Menus</a>
     </li>
     <li>
         <a href="#"><i class="fa fa-fw fa-edit"></i> Settings</a>

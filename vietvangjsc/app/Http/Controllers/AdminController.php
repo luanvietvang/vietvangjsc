@@ -857,7 +857,7 @@ class AdminController extends Controller {
 		$v = Category::validate(Input::all());
 		if ( $v->passes() ) {
 			//Alias name vi 
-			$alias = mb_strtolower(Registrar::removesign(Input::get('name')));
+			$alias = mb_strtolower(Registrar::removesign(Input::get('title')));
 			//Alias name en 
 			$alias_en = mb_strtolower(Registrar::removesign(Input::get('title_en')));
 			//Alias name ja 
@@ -995,7 +995,269 @@ class AdminController extends Controller {
 		#Kiem tra sau khi xoa
 		if(!$str == ''){
 			$msg = array(
-				'type_msg' =>'danger',
+				'type_msg' =>'warning',
+				'msg' => $str.' không xóa được'
+				);
+		}
+		else{
+			$msg = array(
+				'type_msg' =>'success',
+				'msg' =>'Thành công! Dữ liệu đã được xóa'
+				);
+		}
+		session($msg);
+		return Redirect::back();
+	}
+
+	/*--------------------------------- [MENUS]---------------------------------*/
+	/**
+	 * Show the form Memu [index].
+	 *
+	 * @return Response
+	 */
+	public function menus()
+	{
+		//get all
+		$title = 'Menu';
+		$obj = Menu::getAll();
+		$_obj = Menu::_getAll();
+		return view('admin.menus.index')->with([
+				'msg' => $this->msg,
+				'title' => $title,
+				'obj' 	=> $obj,
+				'_obj' 	=> $_obj
+			]);
+	}
+
+	/**
+	 * Add new products [add].
+	 *
+	 * @return Response
+	 */
+	public function menusAdd()
+	{
+		$title = 'Menu [Add]';
+		$parent = 'Menu';
+		//Get List menus
+		$menu = $this->printLstMenuVi(Menu::getMenuVi(),0, '-');
+		return view('admin.menus.add')->with([
+				'msg' => $this->msg,
+				'title' => $title,
+				'parent' => $parent,
+				'menu' => $menu
+		]);
+	}
+
+	public function menusAdd_sm()
+	{
+		$v = Menu::validate(Input::all());
+		if ( $v->passes() ) {
+			//Alias name vi 
+			$alias = mb_strtolower(Registrar::removesign(Input::get('title')));
+			//Alias name en 
+			$alias_en = mb_strtolower(Registrar::removesign(Input::get('title_en')));
+			//Alias name ja 
+			$alias_ja = mb_strtolower(Registrar::removesign(Input::get('title_ja')));
+
+			//Array Category
+			$dataVi = ([
+				'alias' => $alias,
+				'name' => Input::get('title'),
+				'parent_id' => Input::get('parent_id'),
+				'position' => Input::get('position')
+				]);
+			//Array Lang
+			$dataLang = ([[
+				'item_id' => '',
+				'alias' => $alias_en, 
+				'table_name' => 'menus',
+				'lang' => 'en', 
+				'name' => Input::get('title_en')
+				],
+				[
+				'item_id' => '',
+				'alias' => $alias_ja, 
+				'table_name' => 'menus',
+				'lang' => 'ja', 
+				'name' => Input::get('title_ja')
+				]
+				]);
+			$menu = new Menu();
+			$res = $menu->Insert($dataVi, $dataLang);
+			if(!$res){
+				$msg = array(
+					'type_msg' =>'danger',
+					'msg' =>'Lỗi! Đã có lỗi trong quá trình thêm - ref:'.$res
+					);
+			}
+			else{
+				$msg = array(
+					'type_msg' =>'success',
+					'msg' =>'Thành công! Dữ liệu đã được lưu trữ'
+					);
+			}
+			session($msg);
+
+			// return Redirect::back();
+			if(isset($_POST['continue']))
+				return redirect()->action('AdminController@menusAdd');
+			else return redirect()->action('AdminController@menus');
+		}
+		 else {
+		 	Input::flash();
+            return redirect()->action('AdminController@menusAdd')->withErrors( $v->getMessageBag());
+        }
+	}
+
+	/**
+	 * Edit an products [Edit].
+	 *
+	 * @return Response
+	 */
+	public function menusEdit($id)
+	{
+		$title = 'Menu [Edit]';
+		$parent = 'Menu';
+
+		$obj = Menu::read($id);
+		$obj_en = Language::read($id,'menus','en');
+		$obj_ja = Language::read($id,'menus','ja');
+		$menu = $this->printLstMenuViEdit(Menu::getMenuVi(),0, '-',$obj->parent_id);
+
+		return view('admin.menus.edit')->with([
+				'msg' => $this->msg,
+				'title' => $title,
+				'parent' => $parent,
+				'menu' => $menu,
+				'obj' => $obj,
+				'obj_en' => $obj_en,
+				'obj_ja' => $obj_ja
+		]);
+	}
+
+	public function menusEdit_sm()
+	{
+		$id = Input::get('id');
+		$v = Menu::validate(Input::all());
+		if ( $v->passes() ) {
+			//Alias name vi 
+			$alias = mb_strtolower(Registrar::removesign(Input::get('title')));
+			//Alias name en 
+			$alias_en = mb_strtolower(Registrar::removesign(Input::get('title_en')));
+			//Alias name ja 
+			$alias_ja = mb_strtolower(Registrar::removesign(Input::get('title_ja')));
+
+			//Array Menu
+			$dataVi = ([
+				'alias' => $alias,
+				'name' => Input::get('title'),
+				'parent_id' => Input::get('parent_id'),
+				'position' => Input::get('position')
+				]);
+			//Array Lang
+			$dataLang = ([[
+				'item_id' => $id,
+				'alias' => $alias_en, 
+				'table_name' => 'menus',
+				'lang' => 'en', 
+				'name' => Input::get('title_en')
+				],
+				[
+				'item_id' => $id,
+				'alias' => $alias_ja, 
+				'table_name' => 'menus',
+				'lang' => 'ja', 
+				'name' => Input::get('title_ja')
+				]
+				]);
+			$menu = new Menu();
+			$res = $menu->_Update($dataVi, $dataLang, $id);
+			if(!$res){
+				$msg = array(
+					'type_msg' =>'danger',
+					'msg' =>'Lỗi! Đã có lỗi trong quá trình cập nhật - ref:'.$res
+					);
+			}
+			else{
+				$msg = array(
+					'type_msg' =>'success',
+					'msg' =>'Thành công! Dữ liệu đã được lưu trữ'
+					);
+			}
+			session($msg);
+
+			// return Redirect::back();
+			return redirect()->action('AdminController@menus');
+		}
+		 else {
+			return redirect()->action('AdminController@menusEdit', [$id])
+			->withErrors( $v->getMessageBag());;
+        }
+	}
+
+	/**
+	 * Delete products [Delete].
+	 *
+	 * @return Response
+	 */
+	public function menusDel($id)
+	{
+		#check relationship
+		$art = Menu::find($id)->article;
+		if(count($art) == 0)
+		{
+			$menu = new Menu();
+			$obj = $menu->read($id);
+			#Del Database
+			$res = $menu->Del($id);
+			if(!$res){
+				$msg = array(
+					'type_msg' =>'danger',
+					'msg' =>'Lỗi! Đã có lỗi trong quá trình xóa.'
+					);
+			}
+			else{
+				$msg = array(
+					'type_msg' =>'success',
+					'msg' =>'Thành công! Dữ liệu đã được xóa.'
+					);
+			}
+		}else $msg = array(
+					'type_msg' =>'warning',
+					'msg' =>'Không thể xóa! Tồn tại dữ liệu liên quan.'
+					);
+		session($msg);
+		return Redirect::back();
+	}
+
+	public function menusMutiDel()
+	{
+		$arr_id = Input::get('item');
+		//tao string hung name bai viet khong the xoa
+		$str = '';
+		if (is_array($arr_id))
+		{
+			foreach ($arr_id as $id) {
+				#check relationship
+				$art = Menu::find($id)->article;
+				$obj = Menu::read($id);
+				if(count($art) == 0)
+				{
+					# Del database
+					$menu = new Menu();
+					
+					#Del Database
+					$res = $menu->Del($id);
+				}else{
+					$str .= $obj['name'] . ', ';
+					continue;
+				}
+			}
+		}
+		#Kiem tra sau khi xoa
+		if(!$str == ''){
+			$msg = array(
+				'type_msg' =>'warning',
 				'msg' => $str.' không xóa được'
 				);
 		}

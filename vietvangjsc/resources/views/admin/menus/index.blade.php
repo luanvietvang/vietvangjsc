@@ -30,14 +30,15 @@
                     <div class="col-lg-12">
 <!--                         <h2>{!! $title !!}</h2>
  -->                        <div class="table-responsive">
-                            {!! Form::open(array('action' => 'AdminController@categoriesMutiDel')) !!}
+                            {!! Form::open(array('action' => 'AdminController@menusMutiDel')) !!}
                             <table class="table table-bordered table-hover table-striped">
                                 <thead>
                                     <tr>
                                         <th><input type="checkbox" onclick="chon()" id="check_all"> All</th>
                                         <th>No.</th>
                                         <th>Title</th>
-                                        <th>Img</th>
+                                        <th>Parent menu</th>
+                                        <th>Position</th>
                                         <th>Desc</th>
                                         <th>Tools</th>
                                     </tr>
@@ -48,11 +49,18 @@
                                         <td><input type="checkbox" onclick="chon_item(this.checked)" name="item[]" id="item[]" value="{!! $obj[$i]->id !!}" ></td>
                                         <td>{!! $i + 1 !!}</td>
                                         <td>{!! $obj[$i]->name !!}</td>
-                                        <td class="text-center">{!! Html::image('/upload/categories/'.$obj[$i]->logo, 'img', array( 'width' => 70, 'height' => 70 )) !!}</td>
+                                        <td>
+                                            @foreach($_obj as $v)
+                                                @if($v->id == $obj[$i]->parent_id)
+                                                    {!! $v->name !!}
+                                                @endif
+                                            @endforeach
+                                        </td>
+                                        <td>{!! $obj[$i]->position !!}</td>
                                         <td>{!! $obj[$i]->desc !!}</td>
                                         <td>
-                                            {!! Html::decode(Html::link('admin/categories/edit/'. $obj[$i]->id,'<button type="button" class="btn btn-xs btn-warning">Edit</button>')) !!}
-                                            {!! Html::decode(Html::link('admin/categories/del/'. $obj[$i]->id,'<button type="button" class="btn btn-xs btn-danger">Del</button>')) !!}
+                                            {!! Html::decode(Html::link('admin/menus/edit/'. $obj[$i]->id,'<button type="button" class="btn btn-xs btn-warning">Edit</button>')) !!}
+                                            {!! Html::decode(Html::link('admin/menus/del/'. $obj[$i]->id,'<button type="button" class="btn btn-xs btn-danger">Del</button>')) !!}
                                         </td>
                                     </tr>
                                     @endfor
@@ -60,7 +68,7 @@
                                 <tfoot>
                                 <tr>
                                     <td colspan="9">
-                                        {!! Html::decode(Html::link('admin/categories/add','<button type="button" class="btn btn-primary">Add</button>')) !!}
+                                        {!! Html::decode(Html::link('admin/menus/add','<button type="button" class="btn btn-primary">Add</button>')) !!}
                                         <button type="Submit" class="btn btn-danger">Del</button>
                                         
                                         <div class="col-md-12 text-center">
