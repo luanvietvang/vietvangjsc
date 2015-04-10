@@ -39,7 +39,6 @@
                                         <th>Title</th>
                                         <th>Parent menu</th>
                                         <th>Position</th>
-                                        <th>Desc</th>
                                         <th>Tools</th>
                                     </tr>
                                 </thead>
@@ -57,7 +56,6 @@
                                             @endforeach
                                         </td>
                                         <td>{!! $obj[$i]->position !!}</td>
-                                        <td>{!! $obj[$i]->desc !!}</td>
                                         <td>
                                             {!! Html::decode(Html::link('admin/menus/edit/'. $obj[$i]->id,'<button type="button" class="btn btn-xs btn-warning">Edit</button>')) !!}
                                             {!! Html::decode(Html::link('admin/menus/del/'. $obj[$i]->id,'<button type="button" class="btn btn-xs btn-danger">Del</button>')) !!}
