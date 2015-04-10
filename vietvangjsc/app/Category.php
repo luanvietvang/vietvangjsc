@@ -37,6 +37,16 @@ class Category extends MyModel{
 		$this->_url = base_path('public/upload/categories');
 	}
 
+	public function article()
+    {
+        return $this->hasOne('App\Article', 'category_id');
+    }
+
+	public function product()
+    {
+        return $this->hasOne('App\Product', 'category_id');
+    }
+
 	public static function getCategories($lang){
 		if ($lang == "vi") {
 			$result = Category::select('id as id', 'alias as alias', 'name as name', 'logo as logo', 'desc as desc')
@@ -144,7 +154,7 @@ class Category extends MyModel{
 			$arr = array();
 			foreach ($this->fields as $v) {
 				if(isset($dataVi[$v])){
-					if($v == 'img')
+					if($v == 'logo')
 						$arr[$v] = $filename;
 					else $arr[$v] = $dataVi[$v];
 				}
@@ -193,7 +203,7 @@ class Category extends MyModel{
 	 *
 	 * @return true, false
 	 */
-	public function _Update($dataVi, $dataLang, $dataSEO,$id){
+	public function _Update($dataVi, $dataLang, $id){
 		$result = false;
 		try {
 			//get list column
@@ -202,8 +212,8 @@ class Category extends MyModel{
 			$this->fields_Lang = DB::connection()->getSchemaBuilder()->getColumnListing($this->table_Lang);
 
 			DB::beginTransaction();
-			//image articles
-			$filename = $this->read($id)->img;
+			//image categories
+			$filename = $this->read($id)->logo;
 			if($_FILES['image']['name'] != ''){
 				//del old image
 				if (File::exists($this->_url.'/'.$filename))
@@ -213,7 +223,7 @@ class Category extends MyModel{
 
 			}
 			//image en
-			$filename_en = Language::read($id,'articles','en')->img;
+			$filename_en = Language::read($id,'categories','en')->img;
 			if(isset($_FILES['image_en']))
 			{
 				if($_FILES['image_en']['name'] != ''){
@@ -225,7 +235,7 @@ class Category extends MyModel{
 				}
 			}
 			//image ja
-			$filename_ja = Language::read($id,'articles','ja')->img;
+			$filename_ja = Language::read($id,'categories','ja')->img;
 			if(isset($_FILES['image_ja']))
 			{
 				if($_FILES['image_ja']['name'] != ''){
@@ -236,11 +246,11 @@ class Category extends MyModel{
 					$filename_ja = $this->uploadImg(Input::file('image_ja'), $this->_url, 100, 80);
 				}
 			}
-			//Update to Articles
+			//Update to data
 			$arr = array();
 			foreach ($this->fields as $v) {
 				if(isset($dataVi[$v])){
-					if($v == 'img')
+					if($v == 'logo')
 						$arr[$v] = $filename;
 					else $arr[$v] = $dataVi[$v];
 				}
@@ -282,5 +292,4 @@ class Category extends MyModel{
 
 		return $result;
 	}
-
 }

@@ -38,6 +38,7 @@ class Article extends MyModel{
 		parent::__construct('articles');
 		$this->_url = base_path('public/upload/articles');
 	}
+
 	//Huynh Dung added on 2015/03/12
 	// public function initialize($table = null){
 	// 	if(!is_null($table)){

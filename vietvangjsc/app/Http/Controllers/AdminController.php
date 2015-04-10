@@ -766,7 +766,7 @@ class AdminController extends Controller {
 		$v = Category::validate(Input::all());
 		if ( $v->passes() ) {
 			//Alias name vi 
-			$alias = mb_strtolower(Registrar::removesign(Input::get('name')));
+			$alias = mb_strtolower(Registrar::removesign(Input::get('title')));
 			//Alias name en 
 			$alias_en = mb_strtolower(Registrar::removesign(Input::get('title_en')));
 			//Alias name ja 
@@ -921,19 +921,30 @@ class AdminController extends Controller {
 	 */
 	public function categoriesDel($id)
 	{
-		$res = Category::Del($id);
-		if(!$res){
-			$msg = array(
-				'type_msg' =>'danger',
-				'msg' =>'Lỗi! Đã có lỗi trong quá trình xóa'
-				);
-		}
-		else{
-			$msg = array(
-				'type_msg' =>'success',
-				'msg' =>'Thành công! Dữ liệu đã được xóa'
-				);
-		}
+		#check relationship
+		$art = Category::find($id)->article;
+		$pro = Category::find($id)->product;
+		if(count($art) == 0 && count($pro) == 0)
+		{
+			#Remove Image - có làm luôn k?
+			#Del Database
+			$res = Category::Del($id);
+			if(!$res){
+				$msg = array(
+					'type_msg' =>'danger',
+					'msg' =>'Lỗi! Đã có lỗi trong quá trình xóa.'
+					);
+			}
+			else{
+				$msg = array(
+					'type_msg' =>'success',
+					'msg' =>'Thành công! Dữ liệu đã được xóa.'
+					);
+			}
+		}else $msg = array(
+					'type_msg' =>'warning',
+					'msg' =>'Không thể xóa! Tồn tại dữ liệu liên quan.'
+					);
 		session($msg);
 		return Redirect::back();
 		//return Redirect::to('admin/products/');
@@ -947,19 +958,23 @@ class AdminController extends Controller {
 		if (is_array($arr_id))
 		{
 			foreach ($arr_id as $id) {
-				# check relasionship here
-					# code sau...
+				#check relationship
+				$art = Category::find($id)->article;
+				$pro = Category::find($id)->product;
+
 				# Read products
 				$obj = Category::read($id);
-				# Del database
-				$res = Category::Del($id);
-				#Kiem tra sau khi xoa
-				if (!$res) {
+				if(count($art) == 0 && count($pro) == 0)
+				{
+					# Del database
+					$res = Category::Del($id);
+				}else{
 					$str .= $obj['name'] . ', ';
 					continue;
-				}	
+				}
 			}
 		}
+		#Kiem tra sau khi xoa
 		if(!$str == ''){
 			$msg = array(
 				'type_msg' =>'danger',
