@@ -971,11 +971,13 @@ class AdminController extends Controller {
 				$art = Category::find($id)->article;
 				$pro = Category::find($id)->product;
 
+				$category = new Category();
+				$obj = $category->read($id);
 				if(count($art) == 0 && count($pro) == 0)
 				{
 					# Del database
-					$category = new Category();
-					$obj = $category->read($id);
+					
+					
 					$obj_lang = Language::read2($id, 'categories');
 					#Remove Image 
 					if($obj->logo != '' && File::exists($category->getUrl().'/'.$obj->logo))

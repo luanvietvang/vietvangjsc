@@ -96,3 +96,12 @@ Route::post('admin/menus/edit', 'AdminController@menusEdit_sm');
 Route::any('admin/menus/del/{id?}', 'AdminController@menusDel')->where(array('id' => '[0-9]+'));
 Route::any('admin/menus/MutiDel', 'AdminController@menusMutiDel');
 
+/*---------Partners-----------*/
+Route::any('admin/partners', 'AdminController@partners');
+Route::get('admin/partners/add', 'AdminController@partnersAdd');
+Route::post('admin/partners/add', 'AdminController@partnersAdd_sm');
+Route::get('admin/partners/edit/{id?}', 'AdminController@partnersEdit')->where(array('id' => '[0-9]+'));
+Route::post('admin/partners/edit', 'AdminController@partnersEdit_sm');
+Route::any('admin/partners/del/{id?}', 'AdminController@partnerssDel')->where(array('id' => '[0-9]+'));
+Route::any('admin/partners/MutiDel', 'AdminController@partnersMutiDel');
+
