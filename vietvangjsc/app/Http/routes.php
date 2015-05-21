@@ -96,3 +96,20 @@ Route::post('admin/menus/edit', 'AdminController@menusEdit_sm');
 Route::any('admin/menus/del/{id?}', 'AdminController@menusDel')->where(array('id' => '[0-9]+'));
 Route::any('admin/menus/MutiDel', 'AdminController@menusMutiDel');
 
+/*---------Users--------------*/
+Route::get('admin/users', 'AdminController@users');
+Route::get('admin/users/add', 'AdminController@usersAdd');
+Route::post('admin/users/add', 'AdminController@addUser_act');
+Route::get('admin/users/edit/{id?}', 'AdminController@usersEdit');
+Route::post('admin/users/edit', 'AdminController@usersEdit_act');
+Route::any('admin/users/delete/{id?}', 'AdminController@usersDel');
+
+/*---------Partners-------------*/
+Route::get('admin/partners', 'AdminController@partners');
+Route::get('admin/partners/add', 'AdminController@partnersAdd');
+Route::post('admin/partners/add', 'AdminController@addPartner_act');
+Route::any('admin/partners/delete/{id?}', 'AdminController@partnersDel');
+Route::post('admin/partners', 'AdminController@partnersMutiDel');
+//Route::get('admin/partners/edit/{id?}', 'AdminController@partnersEdit');
+//Route::post('admin/partners/edit', 'AdminController@partnersEdit_act');
+

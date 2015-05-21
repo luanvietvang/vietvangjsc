@@ -7,6 +7,7 @@ use App\Partner;
 use App\Article;
 use App\Product;
 use App\Language;
+use App\User;
 use App\Seo;
 use App\Ini;
 use App\Services\Registrar;
@@ -18,6 +19,7 @@ use Redirect;
 use Illuminate\Support\Facades\DB;
 use Url;
 use File;
+use Illuminate\Http\Request;
 // use App\RocketCandy\Exceptions\ValidationException;
 // use App\RocketCandy\Services\Validation\ArticlesFormValidator as ArticlesForm;
 use Carbon\Carbon;
@@ -1295,4 +1297,298 @@ class AdminController extends Controller {
 		return $this->resmenu;
 	}
 
+
+
+
+
+	/*-----------------User------------------*/
+
+	public function users()
+	{
+		$title = 'User';
+		$users = User::getAll();
+		return view('admin.users.index')->with([
+				'msg' 	=> $this->msg,
+				'title' => $title,
+				'users' => $users
+			]);
+	}
+
+	public function usersAdd()
+	{
+		$title = 'User [Add]';
+		$parent = 'User';
+		//Get List categories
+		//$cate = Category::getLstCategoriesVi();
+		return view('admin.users.add')->with([ //
+				'msg' => $this->msg,
+				'title' => $title,
+				'parent' => $parent
+		]);
+	}
+
+	public function addUser_act(Request $request)
+	{
+		$data_user = array(
+			'name' => $request->name,
+			'email' => $request->email,
+			'password' => $request->password,
+			'created_at' => Carbon::now()
+			);
+		$vali = User::validation($data_user);
+		if ($vali->passes())
+		{
+			if (!User::checkExited($request->email,0)){ //check email
+				$result = User::insert($data_user); //---insert
+
+				if(!$result){
+					$msg = array(
+						'type_msg' =>'danger',
+						'msg' =>'Lỗi! Đã có lỗi xảy ra trong quá trình thêm'
+						);
+				}
+				else{
+					$msg = array(
+						'type_msg' =>'success',
+						'msg' =>'Thành công! Dữ liệu đã được lưu trữ'
+						);
+				}
+				session($msg);
+
+				// return Redirect::back();
+				if(isset($_POST['continue']))
+					return redirect()->action('AdminController@usersAdd');
+				else return redirect()->action('AdminController@users');
+			//insert
+			} else{
+				$msg = array(
+						'type_msg' =>'warning',
+						'msg' =>'Cảnh báo! Địa chỉ Email đã tồn tại'
+						);
+				session($msg);
+				return redirect()->action('AdminController@users');
+			}
+			
+		} 
+		else 
+		{
+			Input::flash();
+            return redirect()->action('AdminController@usersAdd')->withErrors( $vali->getMessageBag());
+		}
+	}
+
+	public function usersDel($id)
+	{
+		$result = User::del($id);
+		if (!$result){
+			$msg = array(
+				'type_msg' => 'danger',
+				'msg' => 'Lỗi! Đã có lỗi xảy ra trong quá trình xóa dữ liệu');
+		} else{
+			$msg = array(
+				'type_msg' => 'success',
+				'msg' => 'Thành công! Dữ liệu đã được xóa.');
+		}
+		session($msg);
+		return redirect()->action('AdminController@users');
+	}
+
+	public function usersEdit($id)
+	{
+		$title = 'Edit';
+		$user = User::getuser($id);
+		$parent = 'User';
+		return view('admin.users.edit')->with([
+			'msg' => $this->msg,
+			'title' => $title,
+			'parent' => $parent,
+			'user' => $user
+			]);
+	}
+
+	public function usersEdit_act(Request $request)
+	{
+		$data_user = array(
+			'id' => $request->id,
+			'name' => $request->name,
+			'email' => $request->email,
+			'password' => $request->password,
+			'updated_adt' => Carbon::now()
+			);
+		$vali = User::validation($data_user);
+		if ($vali->passes())
+		{
+			if (!User::checkExited($request->email,$request->id)) //check email
+			{
+				$result = User::upda($data_user);
+
+			// câu lệnh if else nếu email có sự trùng lặp
+				if(!$result){
+					$msg = array(
+						'type_msg' =>'danger',
+						'msg' =>'Lỗi! Đã có lỗi xảy ra trong quá trình cập nhật dữ liệu'
+						);
+				}
+				else{
+					$msg = array(
+						'type_msg' =>'success',
+						'msg' =>'Thành công! Dữ liệu đã được cập nhật')
+					;
+				}
+				session($msg);
+
+				// return Redirect::back();
+				return redirect()->action('AdminController@users');
+				//insert
+			} else{
+					$msg = array(
+							'type_msg' =>'warning',
+							'msg' =>'Cảnh báo! Địa chỉ Email đã tồn tại'
+							);
+					session($msg);
+					return redirect()->action('AdminController@users');
+			}
+		} 
+		else 
+		{
+			Input::flash();
+            return redirect()->action('AdminController@usersAdd')->withErrors( $vali->getMessageBag());
+		}
+	}
+
+
+
+
+
+	/*****************Partner**********************/
+
+
+	/*
+	*get all partner
+	*
+	*/
+	public function partners()
+	{
+		$title = 'Partners';
+		$partners = Partner::getAll();
+		return view('admin.partners.index')->with([
+				'msg' 	=> $this->msg,
+				'title' => $title,
+				'partners'=>$partners
+			]);
+	}
+
+	/*
+	*view add partner
+	*
+	*/
+	public function partnersAdd()
+	{
+		$title = 'Partner [Add]';
+		$parent = 'Partner';
+		return view('admin.partners.add')->with([ //
+				'msg' => $this->msg,
+				'title' => $title,
+				'parent' => $parent
+		]);
+	}
+
+	/*
+	*add partner
+	*
+	*/
+	public function addPartner_act(Request $request)
+	{
+		$data_partner = array(
+			'name' => $request->name,
+			'url' => $request->url,
+			'logo' => ''
+			);
+		$vali = Partner::validation($data_partner);
+		if ($vali->passes())
+		{
+			if (!Partner::checkExited($request->name,0)){ //check email
+				$par = new Partner();
+				$result = $par->insert($data_partner); //---insert
+
+				if(!$result){
+					$msg = array(
+						'type_msg' =>'danger',
+						'msg' =>'Lỗi! Đã có lỗi xảy ra trong quá trình thêm'
+						);
+				}
+				else{
+					$msg = array(
+						'type_msg' =>'success',
+						'msg' =>'Thành công! Dữ liệu đã được lưu trữ'
+						);
+				}
+				session($msg);
+
+				// return Redirect::back();
+				if(isset($_POST['continue']))
+					return redirect()->action('AdminController@partnersAdd');
+				else return redirect()->action('AdminController@partners');
+			//insert
+			} else{
+				$msg = array(
+						'type_msg' =>'warning',
+						'msg' =>'Cảnh báo! Đối tác đã tồn tại'
+						);
+				session($msg);
+				return redirect()->action('AdminController@partners');
+			}
+			
+		} 
+		else 
+		{
+			Input::flash();
+            return redirect()->action('AdminController@partnersAdd')->withErrors( $vali->getMessageBag());
+		}
+	}
+
+
+	/*
+	*delete simple
+	*
+	*/
+	public function partnersDel($id)
+	{
+		$result = Partner::del($id);
+		if (!$result){
+			$msg = array(
+				'type_msg' => 'danger',
+				'msg' => 'Lỗi! Đã có lỗi xảy ra trong quá trình xóa dữ liệu');
+		} else{
+			$msg = array(
+				'type_msg' => 'success',
+				'msg' => 'Thành công! Dữ liệu đã được xóa.');
+		}
+		session($msg);
+		return redirect()->action('AdminController@partners');
+	}
+
+	public function partnersMutiDel(Request $request)
+	{
+		$array_id = $request->get('item');
+		$str = '';
+		if (is_array($array_id))
+		{
+			$str = Partner::delMulti($array_id);
+		}
+		if(!$str == ''){
+			$msg = array(
+				'type_msg' =>'danger',
+				'msg' => $str.' không xóa được'
+				);
+		}
+		else{
+			$msg = array(
+				'type_msg' =>'success',
+				'msg' =>'Thành công! Dữ liệu đã được xóa'
+				);
+		}
+		session($msg);
+		return Redirect::back();
+	}
 }

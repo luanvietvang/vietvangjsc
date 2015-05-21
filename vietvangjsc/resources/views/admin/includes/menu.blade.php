@@ -32,7 +32,7 @@
         <a href="javascript:;" data-toggle="collapse" data-target="#partners"><i class="fa fa-fw fa-arrows-v"></i> Partners <i class="fa fa-fw fa-caret-down"></i></a>
         <ul id="partners" class="collapse">
             <li>
-                <a href="#"><i class="fa fa-fw fa-table"></i> Partners</a>
+                <a href="{{ URL::to('admin/partners') }}"><i class="fa fa-fw fa-table"></i> Partners</a>
             </li>
             <li>
                 <a href="#"><i class="fa fa-fw fa-edit"></i> Add Partners</a>
@@ -43,7 +43,7 @@
         <a href="javascript:;" data-toggle="collapse" data-target="#users"><i class="fa fa-fw fa-arrows-v"></i> Users <i class="fa fa-fw fa-caret-down"></i></a>
         <ul id="users" class="collapse">
             <li>
-                <a href="#"><i class="fa fa-fw fa-table"></i> Users</a>
+                <a href="{{ URL::to('admin/users') }}"><i class="fa fa-fw fa-table"></i> Users</a>
             </li>
             <li>
                 <a href="#"><i class="fa fa-fw fa-edit"></i> Add Users</a>
