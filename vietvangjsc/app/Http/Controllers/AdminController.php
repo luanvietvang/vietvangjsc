@@ -63,6 +63,14 @@ class AdminController extends Controller {
 		return view('admin.index');
 	}
 
+	public function index1()
+	{
+		//do something
+		#check login here
+		# Code....
+		return view('admin.auth.login');
+	}
+
 	/*--------------------------------- [ARTICLE]---------------------------------*/
 	/**
 	 * Show the form articles [index].
@@ -1395,7 +1403,7 @@ class AdminController extends Controller {
 
 	public function usersEdit($id)
 	{
-		$title = 'Edit';
+		$title = 'User [Edit]';
 		$user = User::getuser($id);
 		$parent = 'User';
 		return view('admin.users.edit')->with([
@@ -1452,7 +1460,7 @@ class AdminController extends Controller {
 		else 
 		{
 			Input::flash();
-            return redirect()->action('AdminController@usersAdd')->withErrors( $vali->getMessageBag());
+            return redirect()->action('AdminController@usersEdit')->withErrors( $vali->getMessageBag());
 		}
 	}
 
@@ -1568,6 +1576,11 @@ class AdminController extends Controller {
 		return redirect()->action('AdminController@partners');
 	}
 
+
+	/*
+	*Delete Multi partners
+	*
+	*/
 	public function partnersMutiDel(Request $request)
 	{
 		$array_id = $request->get('item');
@@ -1590,5 +1603,202 @@ class AdminController extends Controller {
 		}
 		session($msg);
 		return Redirect::back();
+	}
+
+
+	/*
+	*get infomation for view
+	*
+	*/
+	public function partnersEdit($id)
+	{
+		$title = 'Parnert [Edit]';
+		$partner = Partner::getpartner($id);
+		$parent = 'Parnert';
+		return view('admin.partners.edit')->with([
+			'msg' => $this->msg,
+			'title' => $title,
+			'parent' => $parent,
+			'partner' => $partner
+			]);
+	}
+
+	/*
+	*Edit partner action
+	*
+	*/
+	public function partnersEdit_act(Request $request)
+	{
+		$data_partner = array(
+			'id' => $request->id,
+			'name' => $request->name,
+			'url' => $request->url,
+			'logo' => $request->logo
+			);
+		$vali = Partner::validation($data_partner);
+		if ($vali->passes())
+		{
+			if (!Partner::checkExited($request->name,$request->id)) //check email
+			{
+				$part = new Partner();
+				$result = $part->upda($data_partner);//---------updated
+
+				if(!$result){
+					$msg = array(
+						'type_msg' =>'danger',
+						'msg' =>'Lỗi! Đã có lỗi xảy ra trong quá trình cập nhật dữ liệu'
+						);
+				}
+				else{
+					$msg = array(
+						'type_msg' =>'success',
+						'msg' =>'Thành công! Dữ liệu đã được cập nhật')
+					;
+				}
+				session($msg);
+
+				return redirect()->action('AdminController@partners');
+			} else{
+					$msg = array(
+							'type_msg' =>'warning',
+							'msg' =>'Cảnh báo! Địa chỉ Email đã tồn tại'
+							);
+					session($msg);
+					return redirect()->action('AdminController@partners');
+			}
+		} 
+		else 
+		{
+			Input::flash();
+            return redirect()->action('AdminController@partnersAdd')->withErrors( $vali->getMessageBag());
+		}
+	}
+
+
+
+
+	/************Companies**************/
+
+	/*
+	*
+	*
+	*/
+	public function company()
+	{
+		$title = 'Company';
+		$companies = Company::getAll();
+		return view('admin.companies.index')->with([
+				'msg' 	=> $this->msg,
+				'title' => $title,
+				'companies'=>$companies
+			]);
+	}
+
+	public function companyEdit($id)
+	{
+		$companies = Company::getcompany($id);
+		if ($companies[0]->lang=='vi'){
+			$title = 'Company [Edit] Tiếng Việt';
+		}
+		if ($companies[0]->lang=='en'){
+			$title = 'Company [Edit] Tiếng Anh';
+		}
+		if ($companies[0]->lang=='ja'){
+			$title = 'Company [Edit] Tiếng Nhật';
+		}
+		$parent = 'Company';
+		return view('admin.companies.edit')->with([
+			'msg' => $this->msg,
+			'title' => $title,
+			'parent' => $parent,
+			'companies' => $companies
+			]);
+	}
+
+	public function companyEdit_act(Request $request)
+	{
+		$data_company = array(
+			'id' 		=> $request->id,
+			'name' 		=> $request->name,
+			'title' 	=> $request->title,
+			'director' 	=> $request->director,
+			'address' 	=> $request->address,
+			'phone'		=> $request->phone,
+			'fax'		=> $request->fax,
+			'email'		=> $request->email,
+			'skype'		=> $request->skype,
+			'copyright'	=> $request->copyright
+			);
+		$vali = Company::validation($data_company);
+		if ($vali->passes())
+		{
+			$result = Company::upda($data_company);//---------updated
+			if(!$result){
+				$msg = array(
+					'type_msg' =>'danger',
+					'msg' =>'Lỗi! Đã có lỗi xảy ra trong quá trình cập nhật dữ liệu'
+					);
+			}
+			else{
+				$msg = array(
+					'type_msg' =>'success',
+					'msg' =>'Thành công! Dữ liệu đã được cập nhật')
+				;
+			}
+			session($msg);
+			return redirect()->action('AdminController@company');
+		} 
+		else 
+		{
+			Input::flash();
+            return redirect()->action('AdminController@companyEdit',$request->id)->withErrors( $vali->getMessageBag());
+		}
+	}
+	public function location()
+	{
+		$title = 'Location [Edit]';
+		$parent = 'Company';
+		$location = Company::getlocation();
+		return view('admin.companies.location')->with([
+				'msg' 	=> $this->msg,
+				'title' => $title,
+				'parent' => $parent,
+				'location'=> $location
+			]);
+	}
+
+
+	public function locationEdit_act(Request $request)
+	{
+		$data_location = array(
+			'id' => $request->id,
+			'latitude' => $request->latitude,
+			'longitude' => $request->longitude
+			);
+				$result = Company::updatelocation($data_location);//---------updated
+
+				if(!$result){
+					$msg = array(
+						'type_msg' =>'danger',
+						'msg' =>'Lỗi! Đã có lỗi xảy ra trong quá trình cập nhật dữ liệu'
+						);
+				}
+				else{
+					$msg = array(
+						'type_msg' =>'success',
+						'msg' =>'Thành công! Dữ liệu đã được cập nhật')
+					;
+				}
+				session($msg);
+		$title = 'Location [Edit]';
+		$parent = 'Company';
+		$location = Company::getlocation();
+		return view('admin.companies.location')->with([
+			'msg' 	=> $this->msg,
+			'title' => $title,
+			'parent' => $parent,
+			'location'=> $location
+		]);
+		
 	}
 }

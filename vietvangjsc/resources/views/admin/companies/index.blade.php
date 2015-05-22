@@ -26,13 +26,6 @@
                     </div>
                 </div>
                 
-                <!-- <div class="row"> -->
-                {!! Form::open(array('url' => 'admin/products/search')) !!}
-                    <div class="form-group input-group">
-                        <input type="text" class="form-control" name="keyword" id="keyword">
-                        <span class="input-group-btn"><button class="btn btn-default" type="Submit"><i class="fa fa-search"></i></button></span>
-                    </div>
-                {!! Form::close() !!}
                 <!-- </div> -->
                 <div class="row">
                     <div class="col-lg-12">
@@ -43,25 +36,32 @@
                                     <tr>
                                         <th><label>No.</label>
                                         <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Password</th>
-                                        <th>Date Created</th>
-                                        <th>Date Updated</th>
+                                        <th>Director</th>
+                                        <th>Address</th>
+                                        <th>Phone</th>
+                                        <th>Language</th>
                                         <th>Tool</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @for ($i = 0; $i < count($users); $i++)
+                                    @for ($i = 0; $i < count($companies); $i++)
                                     <tr class="active">
-                                         <td><label>{!! $i + 1 !!}</label>
-                                        <td>{!! $users[$i]->name !!}</td>
-                                        <td>{!! $users[$i]->email !!}</td>
-                                        <td>{!! $users[$i]->password !!}</td>
-                                        <td>{!! $users[$i]->created_at !!}</td>
-                                        <td>{!! $users[$i]->updated_adt !!}</td>
+                                        <td><label>{!! $i + 1 !!}</label>
+                                        <td>{!! $companies[$i]->name !!}</td>
+                                        <td>{!! $companies[$i]->director !!}</td>
+                                        <td>{!! $companies[$i]->address !!}</td>
+                                        <td>{!! $companies[$i]->phone !!}</td>
+                                        @if ($companies[$i]->lang == 'vi')
+                                        <td><label>Tiếng Việt</label></td>
+                                        @endif
+                                        @if ($companies[$i]->lang == 'en')
+                                        <td><label>Tiếng Anh</label></td>
+                                        @endif
+                                        @if ($companies[$i]->lang == 'ja')
+                                        <td><label>Tiếng Nhật</label></td>
+                                        @endif
                                         <td>
-                                            {!! Html::decode(Html::link('admin/users/edit/'.$users[$i]->id,'<button type="button" class="btn btn-xs btn-warning">Edit</button>')) !!}
-                                            {!! Html::decode(Html::link('admin/users/delete/'.$users[$i]->id,'<button type="button" class="btn btn-xs btn-danger">Del</button>')) !!}
+                                            {!! Html::decode(Html::link('admin/company/edit/'.$companies[$i]->id,'<button type="button" class="btn btn-xs btn-warning">Edit</button>')) !!}
                                         </td>
                                     </tr>
                                     @endfor
@@ -69,10 +69,9 @@
                                 <tfoot>
                                 <tr>
                                     <td colspan="9">
-                                        {!! Html::decode(Html::link('admin/users/add','<button type="button" class="btn btn-primary">Add</button>')) !!}
+                                        {!! Html::decode(Html::link('admin/company/location','<button type="button" class="btn btn-primary">Location</button>')) !!}
                                         
-                                        <div class="col-md-12 text-center">
-                                            {!! $users->render() !!}         
+                                        <div class="col-md-12 text-center">      
                                         </div> <!-- End .pagination -->
                                     </td>
                                 </tr>

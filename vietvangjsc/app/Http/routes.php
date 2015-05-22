@@ -55,7 +55,7 @@ Route::controllers([
 
 //ADMIN
 //Default route
-Route::get('/admin', 'AdminController@index');
+Route::get('admin1', 'AdminController@index1');
 Route::get('admin/index', 'AdminController@index');
 /*---------Articles-----------*/
 Route::any('admin/articles', 'AdminController@articles');
@@ -110,6 +110,13 @@ Route::get('admin/partners/add', 'AdminController@partnersAdd');
 Route::post('admin/partners/add', 'AdminController@addPartner_act');
 Route::any('admin/partners/delete/{id?}', 'AdminController@partnersDel');
 Route::post('admin/partners', 'AdminController@partnersMutiDel');
-//Route::get('admin/partners/edit/{id?}', 'AdminController@partnersEdit');
-//Route::post('admin/partners/edit', 'AdminController@partnersEdit_act');
+Route::get('admin/partners/edit/{id?}', 'AdminController@partnersEdit');
+Route::post('admin/partners/edit', 'AdminController@partnersEdit_act');
 
+
+/*---------Companies------------*/
+Route::get('admin/company', 'AdminController@company');
+Route::get('admin/company/edit/{id?}', 'AdminController@companyEdit');
+Route::post('admin/company/edit', 'AdminController@companyEdit_act');
+Route::get('admin/company/location', 'AdminController@location');
+Route::post('admin/company/location/Edit', 'AdminController@locationEdit_act');

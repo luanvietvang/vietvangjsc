@@ -99,4 +99,6 @@ AND IF PASSWORDS DO NOT MATCH, DISPLAYS MESSAGE NEXT TO INPUT, ELSE CLEAR THE ME
    {
      $("span#"+id).html("");
    }
-}	
+}
+
+

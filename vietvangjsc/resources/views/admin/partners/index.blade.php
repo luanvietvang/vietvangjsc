@@ -42,6 +42,7 @@
                                         <th>Name</th>
                                         <th>Logo</th>
                                         <th>URL</th>
+                                        <th>Tool</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -53,8 +54,7 @@
                                         <td class="text-center">{!! Html::image('/upload/partners/'.$partners[$i]->logo, 'img', array( 'width' => 70, 'height' => 70 )) !!}</td>
                                         <td>{!! $partners[$i]->url !!}</td>
                                         <td>
-                                            {!! Html::decode(Html::link('admin/articles/detail/'. $partners[$i]->id,'<button type="button" class="btn btn-xs btn-info">Info</button>')) !!}
-                                            {!! Html::decode(Html::link('admin/articles/edit/'. $partners[$i]->id,'<button type="button" class="btn btn-xs btn-warning">Edit</button>')) !!}
+                                            {!! Html::decode(Html::link('admin/partners/edit/'. $partners[$i]->id,'<button type="button" class="btn btn-xs btn-warning">Edit</button>')) !!}
                                             {!! Html::decode(Html::link('admin/partners/delete/'. $partners[$i]->id,'<button type="button" class="btn btn-xs btn-danger">Del</button>')) !!}
                                         </td>
                                     </tr>

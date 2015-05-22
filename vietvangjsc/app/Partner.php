@@ -36,7 +36,7 @@ class Partner extends MyModel{
 		$this->_url = base_path('public/upload/partners');
 	}
 
-	/*public static function getPartners($lang){
+	public static function getPartners($lang){
 		if ($lang == "vi") {
 			$result = Partner::select('id as id', 'name as name', 'logo as logo', 'url as url')
 						->orderBy('id','desc')
@@ -54,7 +54,7 @@ class Partner extends MyModel{
 					->get();
 		}
 		return $result;
-	}*/
+	}
 
 
 
@@ -152,5 +152,37 @@ class Partner extends MyModel{
 			
 		}
 		return $str;
+	}
+
+
+	/*
+	*get partner with id
+	*
+	*/
+	public static function getpartner($id)
+	{
+		$result = DB::table('partners')->where('id','=',$id)->get();
+		return $result;
+	}
+
+
+	/*
+	*
+	*
+	*/
+	public function upda($data_partner)
+	{
+		$data = array(
+			'name'	=>	$data_partner['name'],
+			'url'	=>	$data_partner['url'],
+			'logo'	=>	$data_partner['logo']
+			);
+		if ($_FILES['logo']["size"]!=0){
+			$imgname = Partner::uploadImg(Input::file('logo'), $this->_url, 100, 80);
+			$data['logo'] = $imgname;
+		}
+		$result = DB::table('partners')->where('id','=',$data_partner['id'])->update($data);
+		return $result;
+		
 	}
 }

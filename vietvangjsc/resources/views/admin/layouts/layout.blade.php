@@ -31,6 +31,11 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <!--Location-->
+    
+    
+
+
 </head>
 	<!--Body tag-->
 <body>
@@ -50,6 +55,7 @@
 
     <!-- jQuery -->
     <!--<script src="{{ URL::to('admin/js/jquery.js') }}"></script> -->
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
@@ -65,6 +71,8 @@
 
     <!-- My javascript -->
     <script src="{{ URL::to('admin/js/func.js') }}"></script>
+    <script>google.maps.event.addDomListener(window, 'load', initialize);</script>
+
 
     <!-- Upload mutil image -->
      

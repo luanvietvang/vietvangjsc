@@ -54,7 +54,7 @@
         <a href="{{ URL::to('admin/menus') }}"><i class="fa fa-fw fa-table"></i> Menus</a>
     </li>
     <li>
-        <a href="#"><i class="fa fa-fw fa-edit"></i> Settings</a>
+        <a href="{{ URL::to('admin/company') }}"><i class="fa fa-fw fa-edit"></i> Company</a>
     </li>
 </ul>
 </div>
